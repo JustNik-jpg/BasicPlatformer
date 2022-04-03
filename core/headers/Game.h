@@ -4,6 +4,10 @@
 
 #include <SDL.h>
 
+enum class GameState {
+    ACTIVE,
+    EXIT
+};
 
 class Game {
 
@@ -11,9 +15,14 @@ public:
     Game();
     ~Game();
     void run();
-    void loop();
 
 private:
     void initSystem();
+    void loop();
+    void processInput();
+    void render();
+
+    GameState currentState;
+    SDL_Renderer *renderer;
     SDL_Window *window;
 };
