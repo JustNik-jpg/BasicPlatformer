@@ -15,7 +15,7 @@ link_directories(${SDL2_LIB_DIR})
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 link_directories(${SDL2_IMAGE_LIB_DIR})
 
-add_executable(BasicPlatformer main.cpp)
+add_executable(BasicPlatformer main.cpp core/sources/Game.cpp core/headers/Game.h)
 
 target_link_libraries(${PROJECT_NAME} SDL2main SDL2)
 target_link_libraries(${PROJECT_NAME} SDL2_image )
