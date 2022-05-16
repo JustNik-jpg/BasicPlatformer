@@ -4,8 +4,10 @@
 #pragma once
 
 #include <SDL.h>
-#include "entity/ECS.h"
+#include <vector>
+#include <memory>
 #include "TextureManager.h"
+#include "ecs/systems/System.h"
 
 enum class GameState {
     ACTIVE,
@@ -29,6 +31,5 @@ private:
     GameState currentState;
     SDL_Renderer *renderer;
     SDL_Window *window;
-    Manager entityManager;
-    Entity *player;
+    std::vector<std::shared_ptr<System>> systems;
 };

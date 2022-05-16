@@ -4,13 +4,16 @@
 
 #include "Game.h"
 #include "iostream"
-#include "entity/Components.h"
+#include "ecs/ECS.h"
+#include "ecs/systems/MovementSystem.h"
+#include "ecs/components/Component.h"
 #include <cmath>
 
+ECS ecs;
+Entity player;
 
 Game::Game() {
-    //TODO refactor ECS player
-    player = entityManager.addEntity();
+    ecs = ECS();
 }
 
 Game::~Game() {
@@ -35,15 +38,26 @@ void Game::initSystem() {
     if (!renderer) {
         std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg;
     }
+
+    ecs.init();
 }
 
 
 void Game::run() {
     initSystem();
     currentState = GameState::ACTIVE;
-    player->addComponent<PositionComponent>();
-    player->getComponent<PositionComponent>().setPos(10, 10);
     loadResources();
+
+    ecs.registerComponent<TransformComponent>();
+    systems.emplace_back(ecs.registerSystem<MovementSystem>());
+
+    player = ecs.createEntity();
+    Archetype archetype;
+    archetype.set(ecs.getComponentID<TransformComponent>());
+    ecs.setSystemArchetype<MovementSystem>(archetype);
+
+    ecs.addComponent(player, TransformComponent{2, 2});
+
     loop();
 }
 
@@ -55,23 +69,22 @@ void Game::loop() {
     while (currentState == GameState::ACTIVE) {
         processInput();
 
+        for (const auto &system: systems) {
+            system->update();
+        }
+
         Uint64 start = SDL_GetPerformanceCounter();
 
         Uint32 current = SDL_GetTicks();
 
         //TODO convert to normal looking phys based movement system
-        float dT = (current-lastUpdate)/256.0f;
-
-        float xBounds[] = {0, 1280};
-        float yBounds[] = {0, 720};
-
-        std::cout<<player->getComponent<PositionComponent>().getXPos()<<"\n";
+        float dT = (current - lastUpdate) / 256.0f;
 
         lastUpdate = current;
 
         Uint64 end = SDL_GetPerformanceCounter();
 
-        float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+        float elapsedMS = (end - start) / (float) SDL_GetPerformanceFrequency() * 1000.0f;
         render();
 
         // Cap to 60 FPS
@@ -89,6 +102,7 @@ void Game::processInput() {
                 currentState = GameState::EXIT;
                 break;
             case SDL_KEYDOWN:
+                break;
             case SDL_KEYUP:
             default:
                 break;
