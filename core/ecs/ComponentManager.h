@@ -12,19 +12,42 @@
 class ComponentManager {
 public:
     template<typename T>
-    void registerComponent();
+    void registerComponent() {
+        const char *typeName = typeid(T).name();
+
+
+        // Add this component type to the component type map
+        componentTypes.insert({typeName, nextComponentID});
+
+        // Create a ComponentArray pointer and add it to the component arrays map
+        componentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
+
+        // Increment the value so that the next component registered will be different
+        ++nextComponentID;
+    }
 
     template<typename T>
-    ComponentID getComponentID();
+    ComponentID getComponentID() {
+        const char *typeName = typeid(T).name();
+
+        // Return this component's type - used for creating archetypes
+        return componentTypes[typeName];
+    }
 
     template<typename T>
-    void addComponent(Entity entity, T component);
+    void addComponent(Entity entity, T component) {
+        getComponentArray<T>()->insertData(entity, component);
+    }
 
     template<typename T>
-    void removeComponent(Entity entity);
+    void removeComponent(Entity entity) {
+        getComponentArray<T>()->removeData(entity);
+    }
 
     template<typename T>
-    T &getComponent(Entity entity);
+    T &getComponent(Entity entity) {
+        return getComponentArray<T>()->getData(entity);
+    }
 
     void entityDestroyed(Entity entity);
 
@@ -40,5 +63,9 @@ private:
 
     // Convenience function to get the statically cast pointer to the ComponentArray of type T.
     template<typename T>
-    std::shared_ptr<ComponentArray<T>> getComponentArray();
+    std::shared_ptr<ComponentArray<T>> getComponentArray() {
+        const char *typeName = typeid(T).name();
+
+        return std::static_pointer_cast<ComponentArray<T>>(componentArrays[typeName]);
+    }
 };

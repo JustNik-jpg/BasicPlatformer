@@ -89,7 +89,6 @@ void Game::loop() {
 
         // Cap to 60 FPS
         SDL_Delay(std::floor(16.666f - elapsedMS));
-
     }
 }
 

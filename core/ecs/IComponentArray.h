@@ -18,15 +18,47 @@ public:
 template<typename T>
 class ComponentArray : public IComponentArray {
 public:
-    ComponentArray();
 
-    void insertData(Entity entity, T component);
+    ComponentArray() {
+        size = 0;
+    }
 
-    void removeData(Entity entity);
+    void insertData(Entity entity, T component) {
+        // Put new entry at end and update the maps
+        size_t newIndex = size;
+        mEntityToIndexMap[entity] = newIndex;
+        mIndexToEntityMap[newIndex] = entity;
+        mComponentArray[newIndex] = component;
+        ++size;
+    }
 
-    T &getData(Entity entity);
+    void removeData(Entity entity) {
+        // Copy element at end into deleted element's place to maintain density
+        size_t indexOfRemovedEntity = mEntityToIndexMap[entity];
+        size_t indexOfLastElement = size - 1;
+        mComponentArray[indexOfRemovedEntity] = mComponentArray[indexOfLastElement];
 
-    void entityDestroyed(Entity entity) override;
+        // Update map to point to moved spot
+        Entity entityOfLastElement = mIndexToEntityMap[indexOfLastElement];
+        mEntityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;
+        mIndexToEntityMap[indexOfRemovedEntity] = entityOfLastElement;
+
+        mEntityToIndexMap.erase(entity);
+        mIndexToEntityMap.erase(indexOfLastElement);
+
+        --size;
+    }
+
+    T &getData(Entity entity) {
+        return mComponentArray[mEntityToIndexMap[entity]];
+    }
+
+    void entityDestroyed(Entity entity) override{
+        if (mEntityToIndexMap.find(entity) != mEntityToIndexMap.end()) {
+            // Remove the entity's component if it existed
+            removeData(entity);
+        }
+    }
 
 private:
     // The packed array of components (of generic type T),

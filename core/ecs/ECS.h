@@ -15,27 +15,45 @@ public:
 
     // Component methods
     template<typename T>
-    void registerComponent();
+    void registerComponent() {
+        componentManager->registerComponent<T>();
+    }
 
     template<typename T>
-    void addComponent(Entity entity, T component);
+    void addComponent(Entity entity, T component) {
+        componentManager->addComponent(entity, component);
+        auto archetype = entityManager->getArchetype(entity);
+        archetype.set(componentManager->getComponentID<T>());
+        entityManager->setArchetype(entity, archetype);
+        systemManager->entityArchetypeChanged(entity, archetype);
+    }
 
     template<typename T>
-    void removeComponent(Entity entity);
+    void removeComponent(Entity entity) {
+        componentManager->removeComponent<T>(entity);
+    }
 
     template<typename T>
-    T &getComponent(Entity entity);
+    T &getComponent(Entity entity) {
+        return componentManager->getComponent<T>(entity);
+    }
 
     template<typename T>
-    ComponentID getComponentID();
+    ComponentID getComponentID() {
+        return componentManager->getComponentID<T>();
+    }
 
 
     // System methods
     template<typename T>
-    std::shared_ptr<T> registerSystem();
+    std::shared_ptr<T> registerSystem() {
+        return systemManager->registerSystem<T>();
+    }
 
     template<typename T>
-    void setSystemArchetype(Archetype archetype);
+    void setSystemArchetype(Archetype archetype) {
+        systemManager->setArchetype<T>(archetype);
+    }
 
 private:
     std::unique_ptr<ComponentManager> componentManager;
