@@ -31,3 +31,7 @@ void SystemManager::entityArchetypeChanged(Entity entity, Archetype archetype) {
         }
     }
 }
+
+std::unordered_map<const char *, std::shared_ptr<System>> SystemManager::getSystems() {
+    return systems;
+}

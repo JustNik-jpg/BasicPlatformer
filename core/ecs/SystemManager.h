@@ -33,6 +33,13 @@ public:
 
     void entityArchetypeChanged(Entity entity, Archetype archetype);
 
+    std::unordered_map<const char *, std::shared_ptr<System>> getSystems();
+
+    template<typename T>
+    std::shared_ptr<System> getSystem() {
+        return systems.at(typeid(T).name());
+    }
+
 private:
     // Map from system names to a signature
     std::unordered_map<const char *, Archetype> archetypes{};

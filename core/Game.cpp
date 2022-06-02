@@ -11,18 +11,17 @@
 #include <cmath>
 
 ECS ecs;
-Entity player;
 
 Game::Game() {
     ecs = ECS();
 }
 
 Game::~Game() {
-
+    delete entityHelper;
 }
 
 
-void Game::initSystem() {
+void Game::initGame() {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "Initialized SDL successfully";
@@ -39,51 +38,24 @@ void Game::initSystem() {
     if (!renderer) {
         std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg;
     }
-
     ecs.init();
+    initSystems();
+    entityHelper = new EntityHelper(&ecs, renderer);
 }
 
 
 void Game::run() {
-    initSystem();
+    initGame();
     currentState = GameState::ACTIVE;
     loadResources();
 
-    ecs.registerComponent<TransformComponent>();
-    ecs.registerComponent<RenderComponent>();
-
-    systems.emplace_back(ecs.registerSystem<MovementSystem>());
-    auto rs = ecs.registerSystem<RenderSystem>();
-    systems.emplace_back(rs);
-    rs->setRenderer(renderer);
-
-
-    player = ecs.createEntity();
-    Entity player2 = ecs.createEntity();
-
-    Archetype archetype;
-    archetype.set(ecs.getComponentID<TransformComponent>());
-    ecs.setSystemArchetype<MovementSystem>(archetype);
-
-    archetype.set(ecs.getComponentID<RenderComponent>());
-
-    ecs.setSystemArchetype<RenderSystem>(archetype);
-
-
-
-
-    ecs.addComponent(player, TransformComponent{2, 2});
-    ecs.addComponent(player, RenderComponent{TextureManager::loadTexture("char.png", renderer), SDL_Rect{0, 0, 64, 64},SDL_Rect{0, 0, 64, 64}});
-
-    ecs.addComponent(player2, TransformComponent{12, 232});
-    ecs.addComponent(player2, RenderComponent{TextureManager::loadTexture("char.png", renderer), SDL_Rect{0, 0, 64, 64},SDL_Rect{0, 0, 64, 64}});
+    entityHelper->createPlayer();
     loop();
 }
 
 void Game::loop() {
 
-    Uint32 lastUpdate = 0;
-
+    //Uint32 lastUpdate = 0;
 
     while (currentState == GameState::ACTIVE) {
         processInput();
@@ -95,12 +67,10 @@ void Game::loop() {
 
         Uint64 start = SDL_GetPerformanceCounter();
 
-        Uint32 current = SDL_GetTicks();
-
         //TODO convert to normal looking phys based movement system
+        //Uint32 current = SDL_GetTicks();
         //float dT = (current - lastUpdate) / 256.0f;
-
-        lastUpdate = current;
+        //lastUpdate = current;
 
         Uint64 end = SDL_GetPerformanceCounter();
 
@@ -130,12 +100,21 @@ void Game::processInput() {
 }
 
 void Game::render() {
-
-
     SDL_RenderPresent(renderer);
 }
 
-void Game::loadResources() {
-    //player = new Player(TextureManager::loadTexture("char.png", renderer));
-}
+void Game::initSystems() {
+    systems.emplace_back(ecs.registerSystem<MovementSystem>());
+    auto rs = ecs.registerSystem<RenderSystem>();
+    systems.emplace_back(rs);
+    rs->setRenderer(renderer);
 
+    Archetype movementArchetype;
+    movementArchetype.set(ecs.getComponentID<TransformComponent>());
+    ecs.setSystemArchetype<MovementSystem>(movementArchetype);
+
+    Archetype renderArchetype;
+    renderArchetype.set(ecs.getComponentID<TransformComponent>());
+    renderArchetype.set(ecs.getComponentID<RenderComponent>());
+    ecs.setSystemArchetype<RenderSystem>(renderArchetype);
+}

@@ -8,6 +8,7 @@
 #include <memory>
 #include "TextureManager.h"
 #include "ecs/systems/System.h"
+#include "ecs/EntityHelper.h"
 
 enum class GameState {
     ACTIVE,
@@ -22,13 +23,15 @@ public:
     void run();
 
 private:
-    void initSystem();
+    void initGame();
+    void initSystems();
     void loop();
     void processInput();
     void render();
     void loadResources();
 
     GameState currentState;
+    EntityHelper *entityHelper;
     SDL_Renderer *renderer;
     SDL_Window *window;
     std::vector<std::shared_ptr<System>> systems;

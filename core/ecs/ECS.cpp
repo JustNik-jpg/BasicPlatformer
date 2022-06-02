@@ -3,11 +3,15 @@
 //
 
 #include "ECS.h"
+#include "components/Component.h"
 
 void ECS::init() {
     componentManager = std::make_unique<ComponentManager>();
     entityManager = std::make_unique<EntityManager>();
     systemManager = std::make_unique<SystemManager>();
+
+    registerComponent<TransformComponent>();
+    registerComponent<RenderComponent>();
 }
 
 Entity ECS::createEntity() {
