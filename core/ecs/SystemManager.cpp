@@ -19,10 +19,10 @@ void SystemManager::entityArchetypeChanged(Entity entity, Archetype archetype) {
     for (auto const &pair: systems) {
         auto const &type = pair.first;
         auto const &system = pair.second;
-        auto const &systemSignature = archetypes[type];
+        auto const &systemArchetype = archetypes[type];
 
         // Entity archetype matches system signature - insert into set
-        if ((archetype & systemSignature) == systemSignature) {
+        if ((archetype & systemArchetype) == systemArchetype) {
             system->entities.insert(entity);
         }
             // Entity archetype does not match system signature - erase from set

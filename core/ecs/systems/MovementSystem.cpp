@@ -12,7 +12,7 @@ extern ECS ecs;
 void MovementSystem::update() {
     for (auto const &entity: entities) {
         auto &transformComponent = ecs.getComponent<TransformComponent>(entity);
-        transformComponent.x += 10;
+        transformComponent.x += 4;
         std::cout << entity << "\n" << transformComponent.x << " " << transformComponent.y << "\n";
     }
 }

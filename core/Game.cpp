@@ -6,6 +6,7 @@
 #include "iostream"
 #include "ecs/ECS.h"
 #include "ecs/systems/MovementSystem.h"
+#include "ecs/systems/RenderSystem.h"
 #include "ecs/components/Component.h"
 #include <cmath>
 
@@ -49,15 +50,33 @@ void Game::run() {
     loadResources();
 
     ecs.registerComponent<TransformComponent>();
+    ecs.registerComponent<RenderComponent>();
+
     systems.emplace_back(ecs.registerSystem<MovementSystem>());
+    auto rs = ecs.registerSystem<RenderSystem>();
+    systems.emplace_back(rs);
+    rs->setRenderer(renderer);
+
 
     player = ecs.createEntity();
+    Entity player2 = ecs.createEntity();
+
     Archetype archetype;
     archetype.set(ecs.getComponentID<TransformComponent>());
     ecs.setSystemArchetype<MovementSystem>(archetype);
 
-    ecs.addComponent(player, TransformComponent{2, 2});
+    archetype.set(ecs.getComponentID<RenderComponent>());
 
+    ecs.setSystemArchetype<RenderSystem>(archetype);
+
+
+
+
+    ecs.addComponent(player, TransformComponent{2, 2});
+    ecs.addComponent(player, RenderComponent{TextureManager::loadTexture("char.png", renderer), SDL_Rect{0, 0, 64, 64},SDL_Rect{0, 0, 64, 64}});
+
+    ecs.addComponent(player2, TransformComponent{12, 232});
+    ecs.addComponent(player2, RenderComponent{TextureManager::loadTexture("char.png", renderer), SDL_Rect{0, 0, 64, 64},SDL_Rect{0, 0, 64, 64}});
     loop();
 }
 
@@ -68,7 +87,8 @@ void Game::loop() {
 
     while (currentState == GameState::ACTIVE) {
         processInput();
-
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderClear(renderer);
         for (const auto &system: systems) {
             system->update();
         }
@@ -78,7 +98,7 @@ void Game::loop() {
         Uint32 current = SDL_GetTicks();
 
         //TODO convert to normal looking phys based movement system
-        float dT = (current - lastUpdate) / 256.0f;
+        //float dT = (current - lastUpdate) / 256.0f;
 
         lastUpdate = current;
 
@@ -110,8 +130,7 @@ void Game::processInput() {
 }
 
 void Game::render() {
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    SDL_RenderClear(renderer);
+
 
     SDL_RenderPresent(renderer);
 }
@@ -120,13 +139,3 @@ void Game::loadResources() {
     //player = new Player(TextureManager::loadTexture("char.png", renderer));
 }
 
-//void Game::renderEntity(Player *pPlayer) {
-//    SDL_Rect dest;
-//
-//    dest.x = pPlayer->xPos;
-//    dest.y = pPlayer->yPos;
-//    dest.h = 64;
-//    dest.w = 64;
-//
-//    SDL_RenderCopy(renderer, pPlayer->texture, nullptr, &dest);
-//}
