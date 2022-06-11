@@ -9,8 +9,12 @@
 #include "ecs/systems/RenderSystem.h"
 #include "ecs/components/Component.h"
 #include <cmath>
+#include "events/EventController.h"
+#include "events/handlers/PlayerControlHandler.h"
 
 ECS ecs;
+EventController eventController;
+Entity player;
 
 Game::Game() {
     ecs = ECS();
@@ -47,9 +51,10 @@ void Game::initGame() {
 void Game::run() {
     initGame();
     currentState = GameState::ACTIVE;
-    loadResources();
 
-    entityHelper->createPlayer();
+    player = entityHelper->createPlayer();
+    eventController.addEventHandler(new PlayerControlHandler(player));
+
     loop();
 }
 
@@ -86,15 +91,9 @@ void Game::processInput() {
     SDL_Event evnt;
 
     while (SDL_PollEvent(&evnt)) {
-        switch (evnt.type) {
-            case SDL_QUIT:
-                currentState = GameState::EXIT;
-                break;
-            case SDL_KEYDOWN:
-                break;
-            case SDL_KEYUP:
-            default:
-                break;
+        eventController.processEvents(evnt);
+        if (evnt.type == SDL_QUIT) {
+            currentState = GameState::EXIT;
         }
     }
 }

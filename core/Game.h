@@ -28,7 +28,6 @@ private:
     void loop();
     void processInput();
     void render();
-    void loadResources();
 
     GameState currentState;
     EntityHelper *entityHelper;

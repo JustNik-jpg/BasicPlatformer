@@ -7,7 +7,7 @@
 #include "../TextureManager.h"
 
 
-EntityHelper::EntityHelper(ECS* ecs, SDL_Renderer *renderer) {
+EntityHelper::EntityHelper(ECS *ecs, SDL_Renderer *renderer) {
     this->renderer = renderer;
     this->ecs = ecs;
 }
@@ -15,7 +15,9 @@ EntityHelper::EntityHelper(ECS* ecs, SDL_Renderer *renderer) {
 Entity EntityHelper::createPlayer() {
     Entity player = ecs->createEntity();
     ecs->addComponent(player, TransformComponent{2, 2});
-    ecs->addComponent(player, RenderComponent{TextureManager::loadTexture("char.png", renderer), SDL_Rect{0, 0, 64, 64},SDL_Rect{0, 0, 64, 64}});
+    ecs->addComponent(player, RenderComponent{TextureManager::loadTexture("char.png", renderer), SDL_Rect{0, 0, 64, 64},
+                                              SDL_Rect{0, 0, 64, 64}});
+    ecs->addComponent(player, RigidBody{SDL_Rect{0, 0, 64, 64}, 0, 0});
     return player;
 }
 

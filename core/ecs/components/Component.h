@@ -17,5 +17,11 @@ struct RenderComponent {
     SDL_Rect dest; //On screen size
 };
 
+struct RigidBody {
+    SDL_Rect collisionBox;
+    int xSpeed;
+    int ySpeed;
+};
+
 struct PlayerComponent {
 };
