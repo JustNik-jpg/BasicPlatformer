@@ -9,8 +9,5 @@
 
 class RenderSystem : public System {
 public:
-    void setRenderer(SDL_Renderer* _renderer);
     void update() override;
-private:
-    SDL_Renderer* renderer;
 };

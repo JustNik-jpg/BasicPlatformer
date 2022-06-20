@@ -30,8 +30,5 @@ private:
     void render();
 
     GameState currentState;
-    EntityHelper *entityHelper;
-    SDL_Renderer *renderer;
-    SDL_Window *window;
     std::vector<std::shared_ptr<System>> systems;
 };

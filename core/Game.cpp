@@ -4,24 +4,20 @@
 
 #include "Game.h"
 #include "iostream"
-#include "ecs/ECS.h"
 #include "ecs/systems/MovementSystem.h"
 #include "ecs/systems/RenderSystem.h"
 #include "ecs/components/Component.h"
 #include <cmath>
-#include "events/EventController.h"
 #include "events/handlers/PlayerControlHandler.h"
+#include "Engine.h"
 
-ECS ecs;
-EventController eventController;
-Entity player;
+Engine engine;
 
 Game::Game() {
-    ecs = ECS();
 }
 
 Game::~Game() {
-    delete entityHelper;
+
 }
 
 
@@ -30,21 +26,23 @@ void Game::initGame() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "Initialized SDL successfully";
     } else {
-        std::cout << "Something went wrong when initializing SDL... " << "\n" << &SDL_GetErrorMsg;
+        std::cout << "Something went wrong when initializing SDL..." << "\n" << &SDL_GetErrorMsg;
     }
-    window = SDL_CreateWindow("Basic gameussy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, 0);
+    engine.window = SDL_CreateWindow("Basic gameussy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, 0);
 
-    if (!window) {
+    if (!engine.window) {
         std::cout << "Something went wrong creating the window... " << "\n" << &SDL_GetErrorMsg;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, 0);
-    if (!renderer) {
+    engine.renderer = SDL_CreateRenderer(engine.window, -1, 0);
+    if (!engine.renderer) {
         std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg;
     }
-    ecs.init();
+    engine.ecs = new ECS();
+    engine.eventController = new EventController();
+    engine.ecs->init();
     initSystems();
-    entityHelper = new EntityHelper(&ecs, renderer);
+    engine.entityHelper = new EntityHelper(engine.ecs, engine.renderer);
 }
 
 
@@ -52,8 +50,8 @@ void Game::run() {
     initGame();
     currentState = GameState::ACTIVE;
 
-    player = entityHelper->createPlayer();
-    eventController.addEventHandler(new PlayerControlHandler(player));
+    Entity player = engine.entityHelper->createPlayer();
+    engine.eventController->addEventHandler(new PlayerControlHandler(player));
 
     loop();
 }
@@ -64,8 +62,8 @@ void Game::loop() {
 
     while (currentState == GameState::ACTIVE) {
         processInput();
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(engine.renderer, 0, 255, 0, 255);
+        SDL_RenderClear(engine.renderer);
         for (const auto &system: systems) {
             system->update();
         }
@@ -91,7 +89,7 @@ void Game::processInput() {
     SDL_Event evnt;
 
     while (SDL_PollEvent(&evnt)) {
-        eventController.processEvents(evnt);
+        engine.eventController->processEvents(evnt);
         if (evnt.type == SDL_QUIT) {
             currentState = GameState::EXIT;
         }
@@ -99,21 +97,19 @@ void Game::processInput() {
 }
 
 void Game::render() {
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(engine.renderer);
 }
 
 void Game::initSystems() {
-    systems.emplace_back(ecs.registerSystem<MovementSystem>());
-    auto rs = ecs.registerSystem<RenderSystem>();
-    systems.emplace_back(rs);
-    rs->setRenderer(renderer);
+    systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
 
     Archetype movementArchetype;
-    movementArchetype.set(ecs.getComponentID<TransformComponent>());
-    ecs.setSystemArchetype<MovementSystem>(movementArchetype);
+    movementArchetype.set(engine.ecs->getComponentID<TransformComponent>());
+    engine.ecs->setSystemArchetype<MovementSystem>(movementArchetype);
 
     Archetype renderArchetype;
-    renderArchetype.set(ecs.getComponentID<TransformComponent>());
-    renderArchetype.set(ecs.getComponentID<RenderComponent>());
-    ecs.setSystemArchetype<RenderSystem>(renderArchetype);
+    renderArchetype.set(engine.ecs->getComponentID<TransformComponent>());
+    renderArchetype.set(engine.ecs->getComponentID<RenderComponent>());
+    engine.ecs->setSystemArchetype<RenderSystem>(renderArchetype);
 }
