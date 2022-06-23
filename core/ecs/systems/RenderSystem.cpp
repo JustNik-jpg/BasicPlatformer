@@ -17,9 +17,12 @@ void RenderSystem::update() {
         renderComponent.dest.x = transformComponent.x;
         renderComponent.dest.y = transformComponent.y;
 
-        SDL_RenderCopy(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest);
+        //Debug stuff
+        //auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
+        //SDL_SetRenderDrawColor(engine.renderer, 255,0,0, 255);
+        //SDL_RenderFillRect(engine.renderer, &rigidBody.collisionBox);
 
-        std::cout << entity << "\n" << transformComponent.x << " " << transformComponent.y << "\n";
+        SDL_RenderCopy(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest);
     }
 }
 

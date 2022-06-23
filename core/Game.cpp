@@ -10,6 +10,7 @@
 #include <cmath>
 #include "events/handlers/PlayerControlHandler.h"
 #include "Engine.h"
+#include "ecs/systems/PhysicsSystem.h"
 
 Engine engine;
 
@@ -24,11 +25,12 @@ Game::~Game() {
 void Game::initGame() {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-        std::cout << "Initialized SDL successfully";
+        //TODO add \n at all outs
+        std::cout << "Initialized SDL successfully\n";
     } else {
         std::cout << "Something went wrong when initializing SDL..." << "\n" << &SDL_GetErrorMsg;
     }
-    engine.window = SDL_CreateWindow("Basic gameussy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, 0);
+    engine.window = SDL_CreateWindow("Basic gameussy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 768, 0);
 
     if (!engine.window) {
         std::cout << "Something went wrong creating the window... " << "\n" << &SDL_GetErrorMsg;
@@ -43,6 +45,8 @@ void Game::initGame() {
     engine.ecs->init();
     initSystems();
     engine.entityHelper = new EntityHelper(engine.ecs, engine.renderer);
+    engine.roomController = new RoomController();
+    engine.roomController->loadRandomRoom();
 }
 
 
@@ -62,8 +66,7 @@ void Game::loop() {
 
     while (currentState == GameState::ACTIVE) {
         processInput();
-        SDL_SetRenderDrawColor(engine.renderer, 0, 255, 0, 255);
-        SDL_RenderClear(engine.renderer);
+        engine.roomController->renderCurrentLevel(engine.renderer);
         for (const auto &system: systems) {
             system->update();
         }
@@ -101,11 +104,17 @@ void Game::render() {
 }
 
 void Game::initSystems() {
+    systems.emplace_back(engine.ecs->registerSystem<PhysicsSystem>());
     systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
     systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
 
+    Archetype physicsArchetype;
+    physicsArchetype.set(engine.ecs->getComponentID<RigidBody>());
+    engine.ecs->setSystemArchetype<PhysicsSystem>(physicsArchetype);
+
     Archetype movementArchetype;
     movementArchetype.set(engine.ecs->getComponentID<TransformComponent>());
+    movementArchetype.set(engine.ecs->getComponentID<RigidBody>());
     engine.ecs->setSystemArchetype<MovementSystem>(movementArchetype);
 
     Archetype renderArchetype;

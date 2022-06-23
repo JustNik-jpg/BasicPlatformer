@@ -15,8 +15,9 @@ void MovementSystem::update() {
         auto &transformComponent = engine.ecs->getComponent<TransformComponent>(entity);
         auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
 
-        transformComponent.x = std::clamp(rigidBody.xSpeed+transformComponent.x,0, 1280-rigidBody.collisionBox.w);
-        transformComponent.y = std::clamp(rigidBody.ySpeed+transformComponent.y,0, 720-rigidBody.collisionBox.h);
+        rigidBody.collisionBox.x =transformComponent.x = std::clamp(rigidBody.xSpeed + transformComponent.x, 0, 1280 - rigidBody.collisionBox.w);
+        rigidBody.collisionBox.y =transformComponent.y = std::clamp(rigidBody.ySpeed + transformComponent.y, 0, 768 -  rigidBody.collisionBox.h);
+
         std::cout << entity << "\n" << transformComponent.x << " " << transformComponent.y << "\n";
     }
 }

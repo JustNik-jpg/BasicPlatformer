@@ -30,7 +30,7 @@ void PlayerControlHandler::handleEvent(SDL_Event &event) {
         }
 
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
-            switch (event.key.keysym.sym) {
+        switch (event.key.keysym.sym) {
             case SDLK_w:
                 rigidBody.ySpeed += 10;
                 break;

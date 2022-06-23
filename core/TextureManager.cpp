@@ -4,8 +4,13 @@
 
 #include <string>
 #include "TextureManager.h"
+#include "Engine.h"
 
-SDL_Texture *TextureManager::loadTexture(const char *fileName, SDL_Renderer *renderer) {
+extern Engine engine;
+
+std::map<TileType, SDL_Texture *> TextureManager::tileTextures = std::map<TileType, SDL_Texture *>();
+
+SDL_Texture *TextureManager::loadTexture(const char *fileName) {
     std::string path = "../assets/";
     //The final texture
     SDL_Texture *newTexture = nullptr;
@@ -16,7 +21,7 @@ SDL_Texture *TextureManager::loadTexture(const char *fileName, SDL_Renderer *ren
         printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
     } else {
         //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+        newTexture = SDL_CreateTextureFromSurface(engine.renderer, loadedSurface);
         if (newTexture == nullptr) {
             printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
         }
@@ -26,4 +31,13 @@ SDL_Texture *TextureManager::loadTexture(const char *fileName, SDL_Renderer *ren
     }
 
     return newTexture;
+}
+
+SDL_Texture *TextureManager::getTileTexture(TileType type) {
+    if (tileTextures.contains(type)) {
+        return tileTextures.at(type);
+    } else {
+        std::string name = "tile_" + std::to_string(type) + ".png";
+        return tileTextures[type] = loadTexture(name.data());
+    }
 }

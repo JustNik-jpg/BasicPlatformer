@@ -3,11 +3,13 @@
     "",
     "\\core",
     "\\core\\ecs",
+    "\\core\\ecs\\collision",
     "\\core\\ecs\\components",
     "\\core\\ecs\\systems",
     "\\core\\events",
-    "\\core\\events\\handlers"
+    "\\core\\events\\handlers",
+    "\\core\\tilemap"
   ],
-  "SelectedNode": "\\core\\events\\handlers\\PlayerControlHandler.cpp",
+  "SelectedNode": "\\core\\ecs\\collision",
   "PreviewInSolutionExplorer": false
 }

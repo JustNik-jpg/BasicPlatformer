@@ -17,7 +17,7 @@ EntityManager::EntityManager() {
 
 Entity EntityManager::createEntity() {
     if (livingEntityCount >= MAX_ENTITIES) {
-        std::cout << "Entity limit reached! Can't create new entity, returning NULL entity";
+        std::cout << "Entity limit reached! Can't create new entity, returning NULL entity\n";
         return 0;
     }
 

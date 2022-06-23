@@ -6,8 +6,10 @@
 
 #include "ecs/EntityHelper.h"
 #include "events/EventController.h"
+#include "tilemap/RoomController.h"
 
 struct Engine {
+    RoomController *roomController;
     EntityHelper *entityHelper;
     SDL_Renderer *renderer;
     SDL_Window *window;

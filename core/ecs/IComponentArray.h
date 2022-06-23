@@ -38,7 +38,7 @@ public:
         size_t indexOfLastElement = size - 1;
         mComponentArray[indexOfRemovedEntity] = mComponentArray[indexOfLastElement];
 
-        // Update map to point to moved spot
+        // Update tileTextures to point to moved spot
         Entity entityOfLastElement = mIndexToEntityMap[indexOfLastElement];
         mEntityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;
         mIndexToEntityMap[indexOfRemovedEntity] = entityOfLastElement;
