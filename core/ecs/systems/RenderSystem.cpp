@@ -20,9 +20,9 @@ void RenderSystem::update() {
         //Debug stuff
         //auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
         //SDL_SetRenderDrawColor(engine.renderer, 255,0,0, 255);
-        //SDL_RenderFillRect(engine.renderer, &rigidBody.collisionBox);
+        //SDL_RenderFillRectF(engine.renderer, &rigidBody.collisionBox);
 
-        SDL_RenderCopy(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest);
+        SDL_RenderCopyF(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest);
     }
 }
 

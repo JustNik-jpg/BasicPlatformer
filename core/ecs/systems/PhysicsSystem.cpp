@@ -12,15 +12,9 @@ void PhysicsSystem::update() {
     for (auto const &entity: entities) {
         auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
 
-        //if (engine.roomController->isStanding(rigidBody.collisionBox)) {
-        //    if (rigidBody.ySpeed > 0) {
-        //        rigidBody.ySpeed = 0;
-        //    }
-        //} else {
-        //    if (rigidBody.ySpeed < 50) {
-        //        rigidBody.ySpeed += 1;
-        //    }
-        //}
+        if (rigidBody.velocity.y < 50) {
+            rigidBody.velocity.y += 1;
+        }
 
     }
 }

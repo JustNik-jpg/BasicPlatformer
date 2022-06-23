@@ -16,6 +16,6 @@ enum TileType {
 struct Tile {
     bool solid;
     SDL_Texture *texture;
-    SDL_Rect tile;
-    SDL_Rect collisionBox;
+    SDL_FRect tile;
+    SDL_FRect collisionBox;
 };

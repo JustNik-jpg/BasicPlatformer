@@ -15,8 +15,8 @@ Entity EntityHelper::createPlayer() {
     Entity player = ecs->createEntity();
     ecs->addComponent(player, TransformComponent{2, 2});
     ecs->addComponent(player, RenderComponent{TextureManager::loadTexture("char.png"), SDL_Rect{0, 0, 64, 64},
-                                              SDL_Rect{0, 0, 64, 64}});
-    ecs->addComponent(player, RigidBody{SDL_Rect{0, 0, 64, 64}, 0, 0});
+                                              SDL_FRect{0, 0, 64, 64}});
+    ecs->addComponent(player, RigidBody{SDL_FRect{0, -4, 64, 64}, {0, 0}});
     return player;
 }
 

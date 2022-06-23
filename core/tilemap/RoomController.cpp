@@ -6,6 +6,8 @@
 #include <iostream>
 #include "RoomController.h"
 #include "../TextureManager.h"
+#include "../utility/Vector2D.h"
+#include "../collision/Collision.h"
 #include <fstream>
 
 void RoomController::renderCurrentLevel(SDL_Renderer *renderer) {
@@ -17,11 +19,11 @@ void RoomController::renderCurrentLevel(SDL_Renderer *renderer) {
     for (const auto &mapRow: this->tileMap) {
         for (auto tile: mapRow) {
             if (tile != nullptr) {
-                SDL_RenderCopy(renderer, tile->texture, nullptr, &tile->tile);
+                SDL_RenderCopyF(renderer, tile->texture, nullptr, &tile->tile);
 
                 //Debug stuff
                 //if (tile->texture != nullptr) {
-                //    SDL_RenderFillRect(renderer, &tile->collisionBox);
+                //    SDL_RenderFillRectF(renderer, &tile->collisionBox);
                 //}
             }
         }
@@ -40,13 +42,6 @@ void RoomController::loadRoom(int levelId) {
     std::random_device generator;
     std::uniform_int_distribution<int> distribution(0, 2);
     tileMap.resize(24, std::vector<Tile *>(40));
-    //for (int y = 0; y < 24; ++y) {
-    //    for (int x = 0; x < 40; ++x) {
-    //        auto tileChar = TileType(distribution(generator));
-    //        tileMap[y][x] = new Tile{tileChar > 0 ? TextureManager::getTileTexture(tileChar) : nullptr, SDL_Rect{x * 32, y * 32, 32, 32},
-    //                                 SDL_Rect{x, y, 32, 32}};
-    //    }
-    //}
 
     char tileChar;
     std::fstream roomFile;
@@ -62,45 +57,41 @@ void RoomController::loadRoom(int levelId) {
             auto tile = TileType((int) tileChar - 48);
 
             tileMap[y][x] = new Tile{tile > 0, tile > 0 ? TextureManager::getTileTexture(tile) : nullptr,
-                                     SDL_Rect{x * 32, y * 32, 32, 32},
-                                     SDL_Rect{x * 32, y * 32, 32, 32}};
+                                     SDL_FRect{static_cast<float>(x * 32), static_cast<float>(y * 32), 32, 32},
+                                     SDL_FRect{static_cast<float>(x * 32), static_cast<float>(y * 32), 32, 32}};
             roomFile.ignore();
         }
     }
 }
 
-bool RoomController::collidesWithTiles(const SDL_Rect &collider) {
-    return false;
-}
+SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity) {
+    SDL_Point result;
 
-bool checkTopCollision(const SDL_Rect &entityCollider, const SDL_Rect &tileCollider) {
-    if ((std::abs((entityCollider.y + entityCollider.h) - tileCollider.y) <= 2) &&
-        SDL_HasIntersection(&entityCollider, &tileCollider)) {
-        return true;
-    }
-    return false;
-}
+    FVector2D cp, cn;
+    float t = 0, min_t = INFINITY;
+    std::vector<std::pair<std::pair<int, int>, float>> z;
 
-bool RoomController::isStanding(const SDL_Rect &collider) {
-    if (collider.y + collider.h == 768) {
-        return true;
-    }
-    for (const auto &row: tileMap) {
-        for (auto tile: row) {
-            if (checkTopCollision(collider, tile->collisionBox) && tile->solid) {
-                return true;
+    for (int y = 0; y < tileMap.size(); ++y) {
+        for (int x = 0; x < tileMap[y].size(); ++x) {
+            if (collision::collideMovingRectWithRect(collider, tileMap[y][x]->collisionBox, velocity, cp, cn, t) &&
+                tileMap[y][x]->solid) {
+                z.push_back({{y, x}, t});
             }
         }
     }
-    return false;
-}
+    if (z.empty()){
+        return result;
+    }
 
-/*
-TODO:
- Add proper collision handling to the level
-*/
-SDL_Point RoomController::validatePos(SDL_Rect &collider) {
-    SDL_Point result{collider.x, collider.y};
+    std::sort(z.begin(), z.end(),
+              [](const std::pair<std::pair<int, int>, float> &a, const std::pair<std::pair<int, int>, float> &b) {
+                  return a.second < b.second;
+              });
+
+    for (auto j: z) {
+        collision::resolveCollisionMovingRectWithRect(collider, &tileMap[j.first.first][j.first.second]->collisionBox,
+                                                      velocity);
+    }
 
     return result;
 }

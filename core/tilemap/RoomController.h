@@ -6,6 +6,7 @@
 
 #include <vector>
 #include "Tile.h"
+#include "../utility/Vector2D.h"
 
 class RoomController {
 public:
@@ -15,11 +16,7 @@ public:
 
     void renderCurrentLevel(SDL_Renderer *renderer);
 
-    bool collidesWithTiles(const SDL_Rect &collider);
-
-    bool isStanding(const SDL_Rect &collider);
-
-    SDL_Point validatePos(SDL_Rect &collider);
+    SDL_Point validatePos(SDL_FRect *collider, FVector2D &velocity);
 
 private:
     std::vector<std::vector<Tile *>> tileMap;

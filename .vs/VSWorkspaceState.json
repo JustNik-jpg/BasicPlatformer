@@ -3,13 +3,12 @@
     "",
     "\\core",
     "\\core\\ecs",
-    "\\core\\ecs\\collision",
     "\\core\\ecs\\components",
     "\\core\\ecs\\systems",
     "\\core\\events",
     "\\core\\events\\handlers",
     "\\core\\tilemap"
   ],
-  "SelectedNode": "\\core\\ecs\\collision",
+  "SelectedNode": "\\core\\tilemap\\RoomController.cpp",
   "PreviewInSolutionExplorer": false
 }
