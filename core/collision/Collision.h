@@ -7,9 +7,9 @@
 
 #pragma once
 namespace collision {
-    bool
-    collideRayWithRect(const FVector2D &rayOrigin, const FVector2D &rayDir, const SDL_FRect *target, FVector2D &contactPoint,
-                       FVector2D &contactNormal, float &contactTime) {
+    bool collideRayWithRect(const FVector2D &rayOrigin, const FVector2D &rayDir, const SDL_FRect *target,
+                            FVector2D &contactPoint,
+                            FVector2D &contactNormal, float &contactTime) {
         contactNormal = {0, 0};
         contactPoint = {0, 0};
 
@@ -63,7 +63,8 @@ namespace collision {
         return true;
     }
 
-    bool collideMovingRectWithRect(const SDL_FRect *movingRectangle, const SDL_FRect &staticRectangle, const FVector2D &velocity,
+    bool collideMovingRectWithRect(const SDL_FRect *movingRectangle, const SDL_FRect &staticRectangle,
+                                   const FVector2D &velocity,
                                    FVector2D &contactPoint, FVector2D &contactNormal, float &contactTime) {
         // Check if dynamic rectangle is actually moving assuming rectangles are NOT in collision from start
         if (velocity.x == 0 && velocity.y == 0)
@@ -78,7 +79,8 @@ namespace collision {
         expanded_target.y = staticRectangle.y - movingRectangle->h / 2;
         expanded_target.h = staticRectangle.h + movingRectangle->h;
 
-        if (collideRayWithRect(FVector2D(movingRectangle->x, movingRectangle->y) + FVector2D(movingRectangle->w, movingRectangle->h) / 2,
+        if (collideRayWithRect(FVector2D(movingRectangle->x, movingRectangle->y) +
+                               FVector2D(movingRectangle->w, movingRectangle->h) / 2,
                                velocity,
                                &expanded_target, contactPoint, contactNormal, contactTime))
             return (contactTime >= 0.0f && contactTime < 1.0f);
