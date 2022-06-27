@@ -22,7 +22,6 @@ void ControlSystem::update() {
         if (controlComponent.control.y != 0 && rigidBody.standing) {
             rigidBody.velocity.y = 20 * controlComponent.control.y;
         }
-        std::cout << controlComponent.control.y << "\n";
 
     }
 }

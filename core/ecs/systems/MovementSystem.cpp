@@ -24,7 +24,5 @@ void MovementSystem::update() {
         transformComponent.y = rigidBody.collisionBox.y = std::clamp(rigidBody.velocity.y + rigidBody.collisionBox.y,
                                                                      -100.f,
                                                                      768.f - rigidBody.collisionBox.h);
-
-        std::cout << rigidBody.velocity.y << "\n";
     }
 }
