@@ -10,6 +10,7 @@
 struct TransformComponent {
     float x;
     float y;
+    FVector2D directions;
 };
 
 struct RenderComponent {

@@ -29,6 +29,12 @@ public:
     }
 
     template<typename T>
+    bool hasArchetype(Entity entity) {
+        auto archetype = entityManager->getArchetype(entity);
+        return archetype.test(componentManager->getComponentID<T>());
+    }
+
+    template<typename T>
     void removeComponent(Entity entity) {
         componentManager->removeComponent<T>(entity);
     }

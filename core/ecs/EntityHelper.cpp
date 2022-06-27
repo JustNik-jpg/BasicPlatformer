@@ -13,7 +13,7 @@ EntityHelper::EntityHelper(ECS *ecs, SDL_Renderer *renderer) {
 
 Entity EntityHelper::createPlayer() {
     Entity player = ecs->createEntity();
-    ecs->addComponent(player, TransformComponent{0, -16});
+    ecs->addComponent(player, TransformComponent{0, -16, FVector2D{1, 1}});
     ecs->addComponent(player, RenderComponent{TextureManager::loadTexture("char.png"), SDL_Rect{0, 0, 48, 80},
                                               SDL_FRect{0, 0, 48, 80}});
     ecs->addComponent(player, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}});

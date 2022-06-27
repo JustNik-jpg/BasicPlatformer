@@ -2,7 +2,6 @@
 // Created by JustNik on 29 May 2022.
 //
 
-#include <iostream>
 #include "RenderSystem.h"
 #include "../ECS.h"
 #include "../components/Component.h"
@@ -17,12 +16,15 @@ void RenderSystem::update() {
         renderComponent.dest.x = transformComponent.x;
         renderComponent.dest.y = transformComponent.y;
 
+
+
         //Debug stuff
         //auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
         //SDL_SetRenderDrawColor(engine.renderer, 255,0,0, 255);
         //SDL_RenderFillRectF(engine.renderer, &rigidBody.collisionBox);
 
-        SDL_RenderCopyF(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest);
+        SDL_RenderCopyExF(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest, 0,
+                          nullptr, transformComponent.directions.x < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     }
 }
 
