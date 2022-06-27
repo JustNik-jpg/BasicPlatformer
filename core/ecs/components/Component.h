@@ -21,7 +21,12 @@ struct RenderComponent {
 struct RigidBody {
     SDL_FRect collisionBox;
     FVector2D velocity;
+    bool standing;
 };
 
-struct PlayerComponent {
+struct SideComponent {
+};
+
+struct ControlComponent {
+    FVector2D control;
 };

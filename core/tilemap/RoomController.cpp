@@ -64,7 +64,7 @@ void RoomController::loadRoom(int levelId) {
     }
 }
 
-SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity) {
+SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity, bool &standing) {
     SDL_Point result;
 
     FVector2D cp, cn;
@@ -79,7 +79,8 @@ SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity) 
             }
         }
     }
-    if (z.empty()){
+    if (z.empty()) {
+        standing = false;
         return result;
     }
 
@@ -90,7 +91,7 @@ SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity) 
 
     for (auto j: z) {
         collision::resolveCollisionMovingRectWithRect(collider, &tileMap[j.first.first][j.first.second]->collisionBox,
-                                                      velocity);
+                                                      velocity, standing);
     }
 
     return result;

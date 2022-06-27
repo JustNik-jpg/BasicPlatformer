@@ -89,10 +89,16 @@ namespace collision {
     }
 
 
-    bool resolveCollisionMovingRectWithRect(SDL_FRect *movingRect, SDL_FRect *staticRect, FVector2D &velocity) {
+    bool resolveCollisionMovingRectWithRect(SDL_FRect *movingRect, SDL_FRect *staticRect, FVector2D &velocity,
+                                            bool &standing) {
         FVector2D contactPoint, contactNormal;
         float contactTime = 0.0f;
         if (collideMovingRectWithRect(movingRect, *staticRect, velocity, contactPoint, contactNormal, contactTime)) {
+            if (contactNormal.y < 0) {
+                standing = true;
+            } else {
+                standing = false;
+            }
             if (contactNormal.x != 0) {
                 if (contactNormal.x > 0) {
                     movingRect->x = staticRect->x + staticRect->w;

@@ -11,6 +11,7 @@
 #include "events/handlers/PlayerControlHandler.h"
 #include "Engine.h"
 #include "ecs/systems/PhysicsSystem.h"
+#include "ecs/systems/ControlSystem.h"
 
 Engine engine;
 
@@ -107,6 +108,7 @@ void Game::initSystems() {
     systems.emplace_back(engine.ecs->registerSystem<PhysicsSystem>());
     systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
     systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<ControlSystem>());
 
     Archetype physicsArchetype;
     physicsArchetype.set(engine.ecs->getComponentID<RigidBody>());
@@ -121,4 +123,9 @@ void Game::initSystems() {
     renderArchetype.set(engine.ecs->getComponentID<TransformComponent>());
     renderArchetype.set(engine.ecs->getComponentID<RenderComponent>());
     engine.ecs->setSystemArchetype<RenderSystem>(renderArchetype);
+
+    Archetype controlArchetype;
+    controlArchetype.set(engine.ecs->getComponentID<RigidBody>());
+    controlArchetype.set(engine.ecs->getComponentID<ControlComponent>());
+    engine.ecs->setSystemArchetype<ControlSystem>(controlArchetype);
 }

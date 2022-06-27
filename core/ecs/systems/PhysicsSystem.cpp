@@ -16,5 +16,11 @@ void PhysicsSystem::update() {
             rigidBody.velocity.y += 1;
         }
 
+        if (rigidBody.velocity.x > 0) {
+            rigidBody.velocity.x--;
+        } else if (rigidBody.velocity.x < 0) {
+            rigidBody.velocity.x++;
+        }
+
     }
 }

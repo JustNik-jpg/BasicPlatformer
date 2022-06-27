@@ -13,6 +13,8 @@ void ECS::init() {
     registerComponent<TransformComponent>();
     registerComponent<RenderComponent>();
     registerComponent<RigidBody>();
+    registerComponent<ControlComponent>();
+    registerComponent<SideComponent>();
 }
 
 Entity ECS::createEntity() {

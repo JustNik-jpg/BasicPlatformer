@@ -13,32 +13,29 @@ extern Engine engine;
 void PlayerControlHandler::handleEvent(SDL_Event &event) {
     auto &rigidBody = engine.ecs->getComponent<RigidBody>(player);
 
-
-    //TODO: redo control system because now it's kinda broken with collision system
+    auto &controlComponent = engine.ecs->getComponent<ControlComponent>(player);
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         switch (event.key.keysym.sym) {
             case SDLK_w:
-                rigidBody.velocity.y -= 20;
+                controlComponent.control.y--;
                 break;
             case SDLK_a:
-                rigidBody.velocity.x -= 10;
+                controlComponent.control.x--;
                 break;
             case SDLK_d:
-                rigidBody.velocity.x += 10;
+                controlComponent.control.x++;
                 break;
         }
-
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         switch (event.key.keysym.sym) {
+            case SDLK_w:
+                controlComponent.control.y++;
+                break;
             case SDLK_a:
-                if (rigidBody.velocity.x <= -10) {
-                    rigidBody.velocity.x += 10;
-                }
+                controlComponent.control.x++;
                 break;
             case SDLK_d:
-                if (rigidBody.velocity.x >= 10) {
-                    rigidBody.velocity.x -= 10;
-                }
+                controlComponent.control.x--;
                 break;
         }
     }

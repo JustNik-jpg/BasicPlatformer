@@ -15,14 +15,16 @@ void MovementSystem::update() {
         auto &transformComponent = engine.ecs->getComponent<TransformComponent>(entity);
         auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
 
-        auto * colBox = &rigidBody.collisionBox;
+        auto *colBox = &rigidBody.collisionBox;
 
-        engine.roomController->validatePos(colBox, rigidBody.velocity);
-        transformComponent.x = rigidBody.collisionBox.x = std::clamp(rigidBody.velocity.x + rigidBody.collisionBox.x, 0.f,
+        engine.roomController->validatePos(colBox, rigidBody.velocity, rigidBody.standing);
+        transformComponent.x = rigidBody.collisionBox.x = std::clamp(rigidBody.velocity.x + rigidBody.collisionBox.x,
+                                                                     0.f,
                                                                      1280.f - rigidBody.collisionBox.w);
-        transformComponent.y = rigidBody.collisionBox.y = std::clamp(rigidBody.velocity.y + rigidBody.collisionBox.y, -200.f,
+        transformComponent.y = rigidBody.collisionBox.y = std::clamp(rigidBody.velocity.y + rigidBody.collisionBox.y,
+                                                                     -100.f,
                                                                      768.f - rigidBody.collisionBox.h);
 
-        std::cout << entity << "\n" << transformComponent.x << " " << transformComponent.y << "\n";
+        std::cout << rigidBody.velocity.y << "\n";
     }
 }

@@ -16,7 +16,7 @@ public:
 
     void renderCurrentLevel(SDL_Renderer *renderer);
 
-    SDL_Point validatePos(SDL_FRect *collider, FVector2D &velocity);
+    SDL_Point validatePos(SDL_FRect *collider, FVector2D &velocity, bool &standing);
 
 private:
     std::vector<std::vector<Tile *>> tileMap;
