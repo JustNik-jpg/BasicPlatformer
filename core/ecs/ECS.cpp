@@ -15,6 +15,12 @@ void ECS::init() {
     registerComponent<RigidBody>();
     registerComponent<ControlComponent>();
     registerComponent<SideComponent>();
+    registerComponent<Moving>();
+    registerComponent<Following>();
+    registerComponent<LifetimeComponent>();
+    registerComponent<HealthComponent>();
+    registerComponent<DeathComponent>();
+    registerComponent<AttackComponent>();
 }
 
 Entity ECS::createEntity() {
@@ -22,6 +28,10 @@ Entity ECS::createEntity() {
 }
 
 void ECS::destroyEntity(Entity entity) {
+    if (hasArchetype<DeathComponent>(entity)) {
+        auto &death = getComponent<DeathComponent>(entity);
+        death.onDestroy();
+    }
     entityManager->deleteEntity(entity);
     componentManager->entityDestroyed(entity);
     systemManager->entityDestroyed(entity);

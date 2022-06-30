@@ -12,6 +12,9 @@
 #include "Engine.h"
 #include "ecs/systems/PhysicsSystem.h"
 #include "ecs/systems/ControlSystem.h"
+#include "ecs/systems/AttackSystem.h"
+#include "ecs/systems/LifetimeSystem.h"
+#include "ecs/systems/FollowSystem.h"
 
 Engine engine;
 
@@ -105,10 +108,13 @@ void Game::render() {
 }
 
 void Game::initSystems() {
-    systems.emplace_back(engine.ecs->registerSystem<PhysicsSystem>());
-    systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
-    systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<LifetimeSystem>());
     systems.emplace_back(engine.ecs->registerSystem<ControlSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<PhysicsSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<AttackSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<FollowSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
 
     Archetype physicsArchetype;
     physicsArchetype.set(engine.ecs->getComponentID<RigidBody>());
@@ -117,6 +123,7 @@ void Game::initSystems() {
     Archetype movementArchetype;
     movementArchetype.set(engine.ecs->getComponentID<TransformComponent>());
     movementArchetype.set(engine.ecs->getComponentID<RigidBody>());
+    movementArchetype.set(engine.ecs->getComponentID<Moving>());
     engine.ecs->setSystemArchetype<MovementSystem>(movementArchetype);
 
     Archetype renderArchetype;
@@ -128,4 +135,18 @@ void Game::initSystems() {
     controlArchetype.set(engine.ecs->getComponentID<RigidBody>());
     controlArchetype.set(engine.ecs->getComponentID<ControlComponent>());
     engine.ecs->setSystemArchetype<ControlSystem>(controlArchetype);
+
+    Archetype followArchetype;
+    followArchetype.set(engine.ecs->getComponentID<RigidBody>());
+    followArchetype.set(engine.ecs->getComponentID<TransformComponent>());
+    followArchetype.set(engine.ecs->getComponentID<Following>());
+    engine.ecs->setSystemArchetype<FollowSystem>(followArchetype);
+
+    Archetype attackArchetype;
+    attackArchetype.set(engine.ecs->getComponentID<AttackComponent>());
+    engine.ecs->setSystemArchetype<AttackSystem>(attackArchetype);
+
+    Archetype lifetimeArchetype;
+    lifetimeArchetype.set(engine.ecs->getComponentID<LifetimeComponent>());
+    engine.ecs->setSystemArchetype<LifetimeSystem>(lifetimeArchetype);
 }

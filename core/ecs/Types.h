@@ -14,3 +14,4 @@ using ComponentID = std::uint32_t;
 using Archetype = std::bitset<MAX_COMPONENTS>;
 
 const Entity MAX_ENTITIES = 4096;
+const Entity NULL_ENTITY = 0;

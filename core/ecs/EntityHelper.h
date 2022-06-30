@@ -11,6 +11,7 @@ class EntityHelper {
 public:
     EntityHelper(ECS* ecs, SDL_Renderer *renderer);
     Entity createPlayer();
+    Entity createPlayerAttackEntity(Entity owner);
     Entity createEnemy();
 
 private:

@@ -13,6 +13,13 @@ struct TransformComponent {
     FVector2D directions;
 };
 
+struct Moving {
+};
+
+struct Following {
+    Entity following;
+};
+
 struct RenderComponent {
     SDL_Texture *texture;
     SDL_Rect src;  //Texture size
@@ -22,12 +29,46 @@ struct RenderComponent {
 struct RigidBody {
     SDL_FRect collisionBox;
     FVector2D velocity;
+    std::function<void(Entity const &)> onCollide;
     bool standing;
-};
-
-struct SideComponent {
 };
 
 struct ControlComponent {
     FVector2D control;
+};
+
+enum Side {
+    PLAYER,
+    ENEMY,
+    ALLY,
+};
+
+struct SideComponent {
+    Side side;
+};
+
+struct LifetimeComponent {
+    Uint32 createdOn;
+    int lifetime;
+};
+
+struct HealthComponent {
+    int health;
+    Uint32 damagedOn;
+    int invulnerableTicks;
+
+    bool canBeDamaged() {
+        return damagedOn + invulnerableTicks < SDL_GetTicks();
+    }
+};
+
+struct DeathComponent {
+    std::function<void()> onDestroy;
+};
+
+struct AttackComponent {
+    bool attacking;
+    Entity damagingEntity;
+    Uint32 lastAttackedOn;
+    int attackCD;
 };
