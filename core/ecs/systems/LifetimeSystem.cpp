@@ -9,14 +9,10 @@
 extern Engine engine;
 
 void LifetimeSystem::update() {
-    std::vector<Entity> toDelete;
     for (auto const &entity: entities) {
         auto &lifetimeComponent = engine.ecs->getComponent<LifetimeComponent>(entity);
         if (lifetimeComponent.createdOn + lifetimeComponent.lifetime < SDL_GetTicks()) {
-            toDelete.emplace_back(entity);
+            engine.ecs->destroyEntity(entity);
         }
-    }
-    for (auto const& entity: toDelete) {
-        engine.ecs->destroyEntity(entity);
     }
 }

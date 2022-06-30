@@ -18,9 +18,9 @@ void FollowSystem::update() {
         auto &ownerTransform = engine.ecs->getComponent<TransformComponent>(followComponent.following);
         auto &ownerRigidBody = engine.ecs->getComponent<RigidBody>(followComponent.following);
 
-        transform.directions = ownerTransform.directions;
         transform.x = ownerTransform.x;
-        transform.x += ownerTransform.directions.x > 0 ? ownerRigidBody.collisionBox.w : -rigidBody.collisionBox.w;
-        transform.y = ownerTransform.y;
+        rigidBody.collisionBox.x = transform.x +=
+                transform.directions.x > 0 ? ownerRigidBody.collisionBox.w : -rigidBody.collisionBox.w;
+        rigidBody.collisionBox.y = transform.y = ownerTransform.y;
     }
 }

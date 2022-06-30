@@ -14,6 +14,7 @@ void AttackSystem::update() {
         if (attackComponent.attacking) {
             if (attackComponent.damagingEntity == NULL_ENTITY) {
                 attackComponent.damagingEntity = engine.entityHelper->createPlayerAttackEntity(entity);
+                engine.ecs->getComponent<TransformComponent>(attackComponent.damagingEntity).directions = attackComponent.attackDirection;
                 attackComponent.lastAttackedOn = SDL_GetTicks();
             } else if (attackComponent.lastAttackedOn + attackComponent.attackCD < SDL_GetTicks()) {
                 attackComponent.attacking = false;

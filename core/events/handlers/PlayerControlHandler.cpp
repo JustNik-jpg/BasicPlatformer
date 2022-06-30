@@ -44,9 +44,17 @@ void PlayerControlHandler::handleEvent(SDL_Event &event) {
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN :
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    auto &attackComponent = engine.ecs->getComponent<AttackComponent>(player);
-                    attackComponent.attacking = true;
+                auto &attackComponent = engine.ecs->getComponent<AttackComponent>(player);
+                switch (event.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        attackComponent.attacking = true;
+                        attackComponent.attackDirection.x = -1;
+                        break;
+                    case SDL_BUTTON_RIGHT:
+                        attackComponent.attacking = true;
+                        attackComponent.attackDirection.x = 1;
+
+                        break;
                 }
                 break;
         }

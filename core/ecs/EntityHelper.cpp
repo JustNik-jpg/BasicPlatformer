@@ -2,6 +2,7 @@
 // Created by JustNik on 2 Jun 2022.
 //
 
+#include <iostream>
 #include "EntityHelper.h"
 #include "components/Component.h"
 #include "../TextureManager.h"
@@ -13,13 +14,16 @@ EntityHelper::EntityHelper(ECS *ecs, SDL_Renderer *renderer) {
 
 Entity EntityHelper::createPlayer() {
     Entity player = ecs->createEntity();
+    std::cout << "Player ID: " << player << "\n";
     ecs->addComponent(player, TransformComponent{0, -16, FVector2D{1, 1}});
     ecs->addComponent(player, RenderComponent{TextureManager::loadTexture("char.png"), SDL_Rect{0, 0, 48, 80},
                                               SDL_FRect{0, 0, 48, 80}});
     ecs->addComponent(player, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
     ecs->addComponent(player, ControlComponent{FVector2D{0, 0}});
     ecs->addComponent(player, Moving());
-    ecs->addComponent(player, AttackComponent{false, NULL_ENTITY, 0, 1000});
+    ecs->addComponent(player, AttackComponent{false, NULL_ENTITY, FVector2D{0, 0}, 0, 1000});
+    ecs->addComponent(player, SideComponent{PLAYER});
+    ecs->addComponent(player, HealthComponent{4, 400});
 
     return player;
 }
@@ -31,10 +35,9 @@ Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
                                               SDL_FRect{0, 0, 48, 80}});
     ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [this](Entity const &e) {
         if (ecs->hasArchetype<HealthComponent>(e) && ecs->hasArchetype<SideComponent>(e)) {
-            auto &healthComponent = ecs->getComponent<HealthComponent>(e);
             auto &sideComponent = ecs->getComponent<SideComponent>(e);
-            if (sideComponent.side == Side::ENEMY && ecs->getComponent<HealthComponent>(e).canBeDamaged()) {
-                healthComponent.health -= 1;
+            if (sideComponent.side == Side::ENEMY) {
+                --ecs->getComponent<HealthComponent>(e);
             }
         }
     }});
@@ -45,5 +48,17 @@ Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
 }
 
 Entity EntityHelper::createEnemy() {
-    return 0;
+    Entity enemy = ecs->createEntity();
+    std::cout << "Created enemy with ID: " << enemy << "\n";
+
+    ecs->addComponent(enemy, TransformComponent{96, -16, FVector2D{1, 1}});
+    ecs->addComponent(enemy, RenderComponent{TextureManager::loadTexture("enemy.png"), SDL_Rect{0, 0, 48, 80},
+                                             SDL_FRect{0, 0, 48, 80}});
+    ecs->addComponent(enemy, RigidBody{SDL_FRect{96, -16, 48, 80}, {0, 0}, nullptr});
+    ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
+    ecs->addComponent(enemy, Moving());
+    ecs->addComponent(enemy, SideComponent{ENEMY});
+    ecs->addComponent(enemy, HealthComponent{4, 400});
+
+    return enemy;
 }

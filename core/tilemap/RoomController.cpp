@@ -6,9 +6,11 @@
 #include <iostream>
 #include "RoomController.h"
 #include "../TextureManager.h"
-#include "../utility/Vector2D.h"
 #include "../collision/Collision.h"
+#include "../Engine.h"
 #include <fstream>
+
+extern Engine engine;
 
 void RoomController::renderCurrentLevel(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
@@ -39,8 +41,9 @@ void RoomController::loadRandomRoom() {
 }
 
 void RoomController::loadRoom(int levelId) {
-    std::random_device generator;
-    std::uniform_int_distribution<int> distribution(0, 2);
+
+    engine.entityHelper->createEnemy();
+
     tileMap.resize(24, std::vector<Tile *>(40));
 
     char tileChar;

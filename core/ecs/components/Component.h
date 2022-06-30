@@ -54,11 +54,40 @@ struct LifetimeComponent {
 
 struct HealthComponent {
     int health;
+    int invulnerableFrames;
     Uint32 damagedOn;
-    int invulnerableTicks;
 
-    bool canBeDamaged() {
-        return damagedOn + invulnerableTicks < SDL_GetTicks();
+    [[nodiscard]] bool canBeDamaged() const {
+        return damagedOn + invulnerableFrames < SDL_GetTicks();
+    }
+
+    void dealDamage(int damage) {
+        if (canBeDamaged()) {
+            health -= damage;
+            damagedOn = SDL_GetTicks();
+        }
+    }
+
+    void restoreHealth(int restore) {
+        health += restore;
+    }
+
+    void restoreHealth() {
+        restoreHealth(1);
+    }
+
+    void dealDamage() {
+        dealDamage(1);
+    }
+
+    HealthComponent &operator--() {
+        dealDamage();
+        return *this;
+    }
+
+    HealthComponent &operator++() {
+        restoreHealth();
+        return *this;
     }
 };
 
@@ -69,6 +98,7 @@ struct DeathComponent {
 struct AttackComponent {
     bool attacking;
     Entity damagingEntity;
+    FVector2D attackDirection;
     Uint32 lastAttackedOn;
     int attackCD;
 };

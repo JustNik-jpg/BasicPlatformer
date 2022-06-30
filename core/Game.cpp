@@ -15,6 +15,8 @@
 #include "ecs/systems/AttackSystem.h"
 #include "ecs/systems/LifetimeSystem.h"
 #include "ecs/systems/FollowSystem.h"
+#include "ecs/systems/CollisionSystem.h"
+#include "ecs/systems/DeathSystem.h"
 
 Engine engine;
 
@@ -113,7 +115,9 @@ void Game::initSystems() {
     systems.emplace_back(engine.ecs->registerSystem<PhysicsSystem>());
     systems.emplace_back(engine.ecs->registerSystem<AttackSystem>());
     systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<CollisionSystem>());
     systems.emplace_back(engine.ecs->registerSystem<FollowSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<DeathSystem>());
     systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
 
     Archetype physicsArchetype;
@@ -149,4 +153,12 @@ void Game::initSystems() {
     Archetype lifetimeArchetype;
     lifetimeArchetype.set(engine.ecs->getComponentID<LifetimeComponent>());
     engine.ecs->setSystemArchetype<LifetimeSystem>(lifetimeArchetype);
+
+    Archetype collisionArchetype;
+    collisionArchetype.set(engine.ecs->getComponentID<RigidBody>());
+    engine.ecs->setSystemArchetype<ControlSystem>(collisionArchetype);
+
+    Archetype deathArchetype;
+    deathArchetype.set(engine.ecs->getComponentID<HealthComponent>());
+    engine.ecs->setSystemArchetype<DeathSystem>(deathArchetype);
 }
