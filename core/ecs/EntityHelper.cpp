@@ -5,7 +5,7 @@
 #include <iostream>
 #include "EntityHelper.h"
 #include "components/Component.h"
-#include "../TextureManager.h"
+#include "../RenderHelper.h"
 
 EntityHelper::EntityHelper(ECS *ecs, SDL_Renderer *renderer) {
     this->renderer = renderer;
@@ -16,8 +16,7 @@ Entity EntityHelper::createPlayer() {
     Entity player = ecs->createEntity();
     std::cout << "Player ID: " << player << "\n";
     ecs->addComponent(player, TransformComponent{0, -16, FVector2D{1, 1}});
-    ecs->addComponent(player, RenderComponent{TextureManager::loadTexture("char.png"), SDL_Rect{0, 0, 48, 80},
-                                              SDL_FRect{0, 0, 48, 80}});
+    ecs->addComponent(player, RenderHelper::createPlayerRender());
     ecs->addComponent(player, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
     ecs->addComponent(player, ControlComponent{FVector2D{0, 0}});
     ecs->addComponent(player, Moving());
@@ -31,8 +30,7 @@ Entity EntityHelper::createPlayer() {
 Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
     Entity attack = ecs->createEntity();
     ecs->addComponent(attack, TransformComponent{0, 0, FVector2D{0, 0}});
-    ecs->addComponent(attack, RenderComponent{TextureManager::loadTexture("attack.png"), SDL_Rect{0, 0, 48, 80},
-                                              SDL_FRect{0, 0, 48, 80}});
+    ecs->addComponent(attack, RenderHelper::createWeaponRender());
     ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [this](Entity const &e) {
         if (ecs->hasArchetype<HealthComponent>(e) && ecs->hasArchetype<SideComponent>(e)) {
             auto &sideComponent = ecs->getComponent<SideComponent>(e);
@@ -52,8 +50,7 @@ Entity EntityHelper::createEnemy() {
     std::cout << "Created enemy with ID: " << enemy << "\n";
 
     ecs->addComponent(enemy, TransformComponent{96, -16, FVector2D{1, 1}});
-    ecs->addComponent(enemy, RenderComponent{TextureManager::loadTexture("enemy.png"), SDL_Rect{0, 0, 48, 80},
-                                             SDL_FRect{0, 0, 48, 80}});
+    ecs->addComponent(enemy, RenderHelper::createEnemyRender());
     ecs->addComponent(enemy, RigidBody{SDL_FRect{96, -16, 48, 80}, {0, 0}, nullptr});
     ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
     ecs->addComponent(enemy, Moving());

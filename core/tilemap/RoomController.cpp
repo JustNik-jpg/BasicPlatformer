@@ -5,7 +5,7 @@
 #include <random>
 #include <iostream>
 #include "RoomController.h"
-#include "../TextureManager.h"
+#include "../RenderHelper.h"
 #include "../collision/Collision.h"
 #include "../Engine.h"
 #include <fstream>
@@ -13,10 +13,10 @@
 extern Engine engine;
 
 void RoomController::renderCurrentLevel(SDL_Renderer *renderer) {
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, RenderHelper::getBackgroundTexture(), nullptr, nullptr);
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
     for (const auto &mapRow: this->tileMap) {
         for (auto tile: mapRow) {
@@ -59,7 +59,7 @@ void RoomController::loadRoom(int levelId) {
             roomFile.get(tileChar);
             auto tile = TileType((int) tileChar - 48);
 
-            tileMap[y][x] = new Tile{tile > 0, tile > 0 ? TextureManager::getTileTexture(tile) : nullptr,
+            tileMap[y][x] = new Tile{tile > 0, tile > 0 ? RenderHelper::getTileTexture(tile) : nullptr,
                                      SDL_FRect{static_cast<float>(x * 32), static_cast<float>(y * 32), 32, 32},
                                      SDL_FRect{static_cast<float>(x * 32), static_cast<float>(y * 32), 32, 32}};
             roomFile.ignore();

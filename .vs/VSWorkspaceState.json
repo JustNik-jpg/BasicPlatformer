@@ -7,8 +7,9 @@
     "\\core\\ecs\\systems",
     "\\core\\events",
     "\\core\\events\\handlers",
-    "\\core\\tilemap"
+    "\\core\\tilemap",
+    "\\core\\utility"
   ],
-  "SelectedNode": "\\core\\tilemap\\RoomController.cpp",
+  "SelectedNode": "\\core\\TextureManager.cpp",
   "PreviewInSolutionExplorer": false
 }

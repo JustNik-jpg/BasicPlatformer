@@ -6,6 +6,7 @@
 
 #include <SDL.h>
 #include "../../utility/Vector2D.h"
+#include "../Types.h"
 
 struct TransformComponent {
     float x;

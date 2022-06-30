@@ -16,8 +16,6 @@ void RenderSystem::update() {
         renderComponent.dest.x = transformComponent.x;
         renderComponent.dest.y = transformComponent.y;
 
-
-
         //Debug stuff
         //auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
         //SDL_SetRenderDrawColor(engine.renderer, 255,0,0, 255);

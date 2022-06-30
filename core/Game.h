@@ -6,7 +6,7 @@
 #include <SDL.h>
 #include <vector>
 #include <memory>
-#include "TextureManager.h"
+#include "RenderHelper.h"
 #include "ecs/systems/System.h"
 #include "ecs/EntityHelper.h"
 

@@ -46,6 +46,7 @@ void Game::initGame() {
     if (!engine.renderer) {
         std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg;
     }
+    RenderHelper::loadGameTextures();
     engine.ecs = new ECS();
     engine.eventController = new EventController();
     engine.ecs->init();
