@@ -16,10 +16,10 @@ public:
         const char *typeName = typeid(T).name();
 
 
-        // Add this component type to the component type tileTextures
+        // Add this component type to the component type map
         componentTypes.insert({typeName, nextComponentID});
 
-        // Create a ComponentArray pointer and add it to the component arrays tileTextures
+        // Create a ComponentArray pointer and add it to the component arrays map
         componentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
 
         // Increment the value so that the next component registered will be different
