@@ -17,8 +17,8 @@ EntityManager::EntityManager() {
 
 Entity EntityManager::createEntity() {
     if (livingEntityCount >= MAX_ENTITIES) {
-        std::cout << "Entity limit reached! Can't create new entity, returning NULL entity\n";
-        return 0;
+        std::cout << "Entity limit reached! Can't create new entity, returning NULL entity" << std::endl;
+        return NULL_ENTITY;
     }
 
     // Take an ID from the front of the queue
@@ -31,7 +31,7 @@ Entity EntityManager::createEntity() {
 
 void EntityManager::deleteEntity(Entity entity) {
     if (entity > MAX_ENTITIES || entity < 0) {
-        std::cout << "Trying to delete unknown entity: " << entity;
+        std::cout << "Trying to delete unknown entity: " << entity << std::endl;
         return;
     }
 
@@ -45,7 +45,7 @@ void EntityManager::deleteEntity(Entity entity) {
 
 void EntityManager::setArchetype(Entity entity, Archetype archetype) {
     if (entity > MAX_ENTITIES || entity < 0) {
-        std::cout << "Trying to set archetype of an unknown entity: " << entity;
+        std::cout << "Trying to set archetype of an unknown entity: " << entity << std::endl;
         return;
     }
     archetypes[entity] = archetype;
@@ -53,8 +53,9 @@ void EntityManager::setArchetype(Entity entity, Archetype archetype) {
 
 Archetype EntityManager::getArchetype(Entity entity) {
     if (entity > MAX_ENTITIES || entity < 0) {
-        std::cout << "Trying to get archetype of an unknown entity: " << entity<<" returning NULL entity archetype";
-        return archetypes[0];
+        std::cout << "Trying to get archetype of an unknown entity: " << entity << " returning NULL entity archetype"
+                  << std::endl;
+        return archetypes[NULL_ENTITY];
     }
     return archetypes[entity];
 }

@@ -38,12 +38,13 @@ SDL_Texture *RenderHelper::loadTexture(const char *fileName) {
     //Load image at specified path
     SDL_Surface *loadedSurface = IMG_Load(path.append(fileName).c_str());
     if (loadedSurface == nullptr) {
-        std::cout << "Unable to load image " << path.c_str() << "! SDL_image Error: " << IMG_GetError() << "\n";
+        std::cout << "Unable to load image " << path.c_str() << "! SDL_image Error: " << IMG_GetError() << std::endl;
     } else {
         //Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface(engine.renderer, loadedSurface);
         if (newTexture == nullptr) {
-            std::cout << "Unable to create texture from " << path.c_str() << "! SDL Error: " << SDL_GetError() << "\n";
+            std::cout << "Unable to create texture from " << path.c_str() << "! SDL Error: " << SDL_GetError()
+                      << std::endl;
         }
 
         //Get rid of old loaded surface
@@ -55,7 +56,7 @@ SDL_Texture *RenderHelper::loadTexture(const char *fileName) {
 
 SDL_Texture *RenderHelper::getTexture(std::string name) {
     if (!textureMap.contains(name)) {
-        std::cout << "Trying to access not registered texture! - " << name << "\n";
+        std::cout << "Trying to access not registered texture! - " << name << std::endl;
         return nullptr;
     }
     return textureMap.at(name);

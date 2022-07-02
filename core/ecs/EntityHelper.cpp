@@ -14,7 +14,7 @@ EntityHelper::EntityHelper(ECS *ecs, SDL_Renderer *renderer) {
 
 Entity EntityHelper::createPlayer() {
     Entity player = ecs->createEntity();
-    std::cout << "Player ID: " << player << "\n";
+    std::cout << "Player ID: " << player << std::endl;
     ecs->addComponent(player, TransformComponent{0, -16, FVector2D{1, 1}});
     ecs->addComponent(player, RenderHelper::createPlayerRender());
     ecs->addComponent(player, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
@@ -47,7 +47,7 @@ Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
 
 Entity EntityHelper::createEnemy() {
     Entity enemy = ecs->createEntity();
-    std::cout << "Created enemy with ID: " << enemy << "\n";
+    std::cout << "Created enemy with ID: " << enemy << std::endl;
 
     ecs->addComponent(enemy, TransformComponent{96, -16, FVector2D{1, 1}});
     ecs->addComponent(enemy, RenderHelper::createEnemyRender());

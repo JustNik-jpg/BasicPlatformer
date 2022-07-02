@@ -31,20 +31,19 @@ Game::~Game() {
 void Game::initGame() {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-        //TODO add \n at all outs
-        std::cout << "Initialized SDL successfully\n";
+        std::cout << "Initialized SDL successfully" << std::endl;
     } else {
-        std::cout << "Something went wrong when initializing SDL..." << "\n" << &SDL_GetErrorMsg;
+        std::cout << "Something went wrong when initializing SDL..." << "\n" << &SDL_GetErrorMsg << std::endl;
     }
     engine.window = SDL_CreateWindow("Basic gameussy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 768, 0);
 
     if (!engine.window) {
-        std::cout << "Something went wrong creating the window... " << "\n" << &SDL_GetErrorMsg;
+        std::cout << "Something went wrong creating the window... " << "\n" << &SDL_GetErrorMsg << std::endl;
     }
 
     engine.renderer = SDL_CreateRenderer(engine.window, -1, 0);
     if (!engine.renderer) {
-        std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg;
+        std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg << std::endl;
     }
     RenderHelper::loadGameTextures();
     engine.ecs = new ECS();

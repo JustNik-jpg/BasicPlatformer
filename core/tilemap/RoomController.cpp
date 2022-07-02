@@ -51,7 +51,7 @@ void RoomController::loadRoom(int levelId) {
     std::string path = "../rooms/room" + std::to_string(levelId) + ".txt";
     roomFile.open(path);
     if (roomFile.peek() == std::ifstream::traits_type::eof()) {
-        std::cout << "Empty room file. Can't load current room...\n";
+        std::cout << "Empty room file. Can't load current room..." << std::endl;
         return;
     }
     for (int y = 0; y < 24; ++y) {
