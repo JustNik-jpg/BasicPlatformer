@@ -6,6 +6,7 @@
 #include "ControlSystem.h"
 #include "../../Engine.h"
 #include "../components/Component.h"
+#include "../Constants.h"
 
 extern Engine engine;
 
@@ -14,13 +15,11 @@ void ControlSystem::update() {
         auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
         auto &controlComponent = engine.ecs->getComponent<ControlComponent>(entity);
 
-        //TODO: move forces to constants
-
-        if (rigidBody.velocity.x < 10 && rigidBody.velocity.x > -10) {
-            rigidBody.velocity.x = 10 * controlComponent.control.x;
+        if (rigidBody.velocity.x < constants::DEFAULT_X_SPEED && rigidBody.velocity.x > -constants::DEFAULT_X_SPEED) {
+            rigidBody.velocity.x = constants::DEFAULT_X_SPEED * controlComponent.control.x;
         }
         if (controlComponent.control.y != 0 && rigidBody.standing) {
-            rigidBody.velocity.y = 20 * controlComponent.control.y;
+            rigidBody.velocity.y = constants::DEFAULT_JUMP_FORCE * controlComponent.control.y;
         }
 
     }
