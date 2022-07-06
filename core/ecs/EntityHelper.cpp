@@ -51,7 +51,14 @@ Entity EntityHelper::createEnemy() {
 
     engine.ecs->addComponent(enemy, TransformComponent{128, -16, FVector2D{1, 0}});
     engine.ecs->addComponent(enemy, RenderHelper::createEnemyRender());
-    engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{128, -16, 48, 80}, {0, 0}, nullptr});
+    engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{128, -16, 48, 80}, {0, 0}, [](Entity const &e) {
+        if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
+            auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
+            if (sideComponent.side != Side::ENEMY) {
+                --engine.ecs->getComponent<HealthComponent>(e);
+            }
+        }
+    }});
     engine.ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
     engine.ecs->addComponent(enemy, Moving());
     engine.ecs->addComponent(enemy, SideComponent{ENEMY});
