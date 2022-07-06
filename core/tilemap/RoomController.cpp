@@ -67,24 +67,28 @@ void RoomController::loadRoom(int levelId) {
     }
 }
 
-SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity, bool &standing) {
-    SDL_Point result;
-
+void RoomController::validatePos(RigidBody *collider) {
     FVector2D cp, cn;
     float t = 0, min_t = INFINITY;
     std::vector<std::pair<std::pair<int, int>, float>> z;
 
     for (int y = 0; y < tileMap.size(); ++y) {
         for (int x = 0; x < tileMap[y].size(); ++x) {
-            if (collision::collideMovingRectWithRect(collider, tileMap[y][x]->collisionBox, velocity, cp, cn, t) &&
+            if (collision::collideMovingRectWithRect(&collider->collisionBox, tileMap[y][x]->collisionBox,
+                                                     collider->velocity, cp, cn, t) &&
                 tileMap[y][x]->solid) {
                 z.push_back({{y, x}, t});
             }
         }
     }
+
+    collider->contacts[0] = false;
+    collider->contacts[1] = false;
+    collider->contacts[2] = false;
+    collider->contacts[3] = false;
+
     if (z.empty()) {
-        standing = false;
-        return result;
+        return;
     }
 
     std::sort(z.begin(), z.end(),
@@ -93,11 +97,28 @@ SDL_Point RoomController::validatePos(SDL_FRect *collider, FVector2D &velocity, 
               });
 
     for (auto j: z) {
-        collision::resolveCollisionMovingRectWithRect(collider, &tileMap[j.first.first][j.first.second]->collisionBox,
-                                                      velocity, standing);
+        collision::resolveCollisionMovingRectWithRect(collider, &tileMap[j.first.first][j.first.second]->collisionBox);
+    }
+}
+
+FVector2D RoomController::getLineOfSight(const FVector2D &pos, const FVector2D &dir) {
+    std::map<float, FVector2D> contactMap;
+
+    FVector2D finalDir = dir * 300;
+    for (const auto &row: tileMap) {
+        for (auto tile: row) {
+            FVector2D contactPoint, contactNormal;
+            float contactTime;
+            bool contact = collision::collideRayWithRect(pos, finalDir, &tile->collisionBox, contactPoint,
+                                                         contactNormal, contactTime);
+            contactPoint.y = pos.y;
+            if (contact && tile->solid) {
+                contactMap[contactTime] = contactPoint;
+            }
+        }
     }
 
-    return result;
+    return contactMap.begin()->second;
 }
 
 

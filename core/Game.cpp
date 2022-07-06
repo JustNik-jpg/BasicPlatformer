@@ -17,6 +17,7 @@
 #include "ecs/systems/FollowSystem.h"
 #include "ecs/systems/CollisionSystem.h"
 #include "ecs/systems/DeathSystem.h"
+#include "ecs/systems/EnemyAISystem.h"
 
 Engine engine;
 
@@ -50,7 +51,7 @@ void Game::initGame() {
     engine.eventController = new EventController();
     engine.ecs->init();
     initSystems();
-    engine.entityHelper = new EntityHelper(engine.ecs, engine.renderer);
+    engine.entityHelper = new EntityHelper();
     engine.roomController = new RoomController();
     engine.roomController->loadRandomRoom();
 }
@@ -115,6 +116,7 @@ void Game::initSystems() {
     systems.emplace_back(engine.ecs->registerSystem<PhysicsSystem>());
     systems.emplace_back(engine.ecs->registerSystem<AttackSystem>());
     systems.emplace_back(engine.ecs->registerSystem<MovementSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<EnemyAISystem>());
     systems.emplace_back(engine.ecs->registerSystem<CollisionSystem>());
     systems.emplace_back(engine.ecs->registerSystem<FollowSystem>());
     systems.emplace_back(engine.ecs->registerSystem<DeathSystem>());
@@ -161,4 +163,10 @@ void Game::initSystems() {
     Archetype deathArchetype;
     deathArchetype.set(engine.ecs->getComponentID<HealthComponent>());
     engine.ecs->setSystemArchetype<DeathSystem>(deathArchetype);
+
+    Archetype enemyAIArchetype;
+    enemyAIArchetype.set(engine.ecs->getComponentID<EnemyAIComponent>());
+    enemyAIArchetype.set(engine.ecs->getComponentID<RigidBody>());
+    enemyAIArchetype.set(engine.ecs->getComponentID<TransformComponent>());
+    engine.ecs->setSystemArchetype<EnemyAISystem>(enemyAIArchetype);
 }

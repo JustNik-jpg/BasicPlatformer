@@ -6,56 +6,61 @@
 #include "EntityHelper.h"
 #include "components/Component.h"
 #include "../RenderHelper.h"
+#include "../Engine.h"
 
-EntityHelper::EntityHelper(ECS *ecs, SDL_Renderer *renderer) {
-    this->renderer = renderer;
-    this->ecs = ecs;
-}
+extern Engine engine;
 
 Entity EntityHelper::createPlayer() {
-    Entity player = ecs->createEntity();
-    std::cout << "Player ID: " << player << std::endl;
-    ecs->addComponent(player, TransformComponent{0, -16, FVector2D{1, 1}});
-    ecs->addComponent(player, RenderHelper::createPlayerRender());
-    ecs->addComponent(player, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
-    ecs->addComponent(player, ControlComponent{FVector2D{0, 0}});
-    ecs->addComponent(player, Moving());
-    ecs->addComponent(player, AttackComponent{false, NULL_ENTITY, FVector2D{0, 0}, 0, 1000});
-    ecs->addComponent(player, SideComponent{PLAYER});
-    ecs->addComponent(player, HealthComponent{4, 400});
+    Entity playa = engine.ecs->createEntity();
+    std::cout << "Player ID: " << playa << std::endl;
+    engine.ecs->addComponent(playa, TransformComponent{0, -16, FVector2D{1, 0}});
+    engine.ecs->addComponent(playa, RenderHelper::createPlayerRender());
+    engine.ecs->addComponent(playa, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
+    engine.ecs->addComponent(playa, ControlComponent{FVector2D{0, 0}});
+    engine.ecs->addComponent(playa, Moving());
+    engine.ecs->addComponent(playa, AttackComponent{false, NULL_ENTITY, FVector2D{0, 0}, 0, 1000});
+    engine.ecs->addComponent(playa, SideComponent{PLAYER});
+    engine.ecs->addComponent(playa, HealthComponent{4, 400});
+
+    player = playa;
 
     return player;
 }
 
 Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
-    Entity attack = ecs->createEntity();
-    ecs->addComponent(attack, TransformComponent{0, 0, FVector2D{0, 0}});
-    ecs->addComponent(attack, RenderHelper::createWeaponRender());
-    ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [this](Entity const &e) {
-        if (ecs->hasArchetype<HealthComponent>(e) && ecs->hasArchetype<SideComponent>(e)) {
-            auto &sideComponent = ecs->getComponent<SideComponent>(e);
+    Entity attack = engine.ecs->createEntity();
+    engine.ecs->addComponent(attack, TransformComponent{0, 0, FVector2D{0, 0}});
+    engine.ecs->addComponent(attack, RenderHelper::createWeaponRender());
+    engine.ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [this](Entity const &e) {
+        if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
+            auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
             if (sideComponent.side == Side::ENEMY) {
-                --ecs->getComponent<HealthComponent>(e);
+                --engine.ecs->getComponent<HealthComponent>(e);
             }
         }
     }});
-    ecs->addComponent(attack, Following{owner});
-    ecs->addComponent(attack, LifetimeComponent{SDL_GetTicks(), 900});
+    engine.ecs->addComponent(attack, Following{owner});
+    engine.ecs->addComponent(attack, LifetimeComponent{SDL_GetTicks(), 900});
 
     return attack;
 }
 
 Entity EntityHelper::createEnemy() {
-    Entity enemy = ecs->createEntity();
+    Entity enemy = engine.ecs->createEntity();
     std::cout << "Created enemy with ID: " << enemy << std::endl;
 
-    ecs->addComponent(enemy, TransformComponent{96, -16, FVector2D{1, 1}});
-    ecs->addComponent(enemy, RenderHelper::createEnemyRender());
-    ecs->addComponent(enemy, RigidBody{SDL_FRect{96, -16, 48, 80}, {0, 0}, nullptr});
-    ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
-    ecs->addComponent(enemy, Moving());
-    ecs->addComponent(enemy, SideComponent{ENEMY});
-    ecs->addComponent(enemy, HealthComponent{4, 400});
+    engine.ecs->addComponent(enemy, TransformComponent{128, -16, FVector2D{1, 0}});
+    engine.ecs->addComponent(enemy, RenderHelper::createEnemyRender());
+    engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{128, -16, 48, 80}, {0, 0}, nullptr});
+    engine.ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
+    engine.ecs->addComponent(enemy, Moving());
+    engine.ecs->addComponent(enemy, SideComponent{ENEMY});
+    engine.ecs->addComponent(enemy, EnemyAIComponent{Patrolling, 0, FVector2D{128, -16}});
+    engine.ecs->addComponent(enemy, HealthComponent{4, 400});
 
     return enemy;
+}
+
+Entity EntityHelper::getPlayer() {
+    return player;
 }

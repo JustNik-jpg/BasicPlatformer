@@ -7,16 +7,15 @@
 #include <vector>
 #include "Tile.h"
 #include "../utility/Vector2D.h"
+#include "../ecs/components/Component.h"
 
 class RoomController {
 public:
     void loadRandomRoom();
-
     void loadRoom(int levelId);
-
     void renderCurrentLevel(SDL_Renderer *renderer);
-
-    SDL_Point validatePos(SDL_FRect *collider, FVector2D &velocity, bool &standing);
+    void validatePos(RigidBody *collider);
+    FVector2D getLineOfSight(const FVector2D& pos, const FVector2D& dir);
 
 private:
     std::vector<std::vector<Tile *>> tileMap;

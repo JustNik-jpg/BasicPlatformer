@@ -31,7 +31,7 @@ struct RigidBody {
     SDL_FRect collisionBox;
     FVector2D velocity;
     std::function<void(Entity const &)> onCollide;
-    bool standing;
+    bool contacts[4];
 };
 
 struct ControlComponent {
@@ -102,4 +102,18 @@ struct AttackComponent {
     FVector2D attackDirection;
     Uint32 lastAttackedOn;
     int attackCD;
+};
+
+enum EntityState {
+    Patrolling,
+    Chasing,
+    Seeking
+};
+
+struct EnemyAIComponent {
+    EntityState state;
+    Uint32 lastSeenTime;
+    FVector2D currentDestination;
+    Uint32 startPathAfter;
+    FVector2D chasePosSeen;
 };

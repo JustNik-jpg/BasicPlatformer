@@ -9,10 +9,16 @@
 extern Engine engine;
 
 void DeathSystem::update() {
+    std::vector<Entity> toDelete;
+
     for (auto const &entity: entities) {
         auto &healthComponent = engine.ecs->getComponent<HealthComponent>(entity);
         if (healthComponent.health <= 0) {
-            engine.ecs->destroyEntity(entity);
+            toDelete.emplace_back(entity);
+
         }
+    }
+    for (auto entity: toDelete) {
+        engine.ecs->destroyEntity(entity);
     }
 }

@@ -21,6 +21,8 @@ void ECS::init() {
     registerComponent<HealthComponent>();
     registerComponent<DeathComponent>();
     registerComponent<AttackComponent>();
+    registerComponent<EntityState>();
+    registerComponent<EnemyAIComponent>();
 }
 
 Entity ECS::createEntity() {
