@@ -18,7 +18,6 @@ void ControlSystem::update() {
             rigidBody.velocity.x = constants::DEFAULT_X_SPEED * controlComponent.control.x;
         }
         if (controlComponent.control.y >= -1 && rigidBody.contacts[2]) {
-            std::cout<<"Control "<<controlComponent.control.y;
             rigidBody.velocity.y = constants::DEFAULT_JUMP_FORCE * controlComponent.control.y;
         }
 
