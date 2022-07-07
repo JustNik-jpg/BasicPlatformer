@@ -23,6 +23,7 @@ void ECS::init() {
     registerComponent<AttackComponent>();
     registerComponent<EntityState>();
     registerComponent<EnemyAIComponent>();
+    registerComponent<AnimationComponent>();
 }
 
 Entity ECS::createEntity() {

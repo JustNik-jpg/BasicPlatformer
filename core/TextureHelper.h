@@ -12,16 +12,13 @@
 
 #pragma once
 
-class RenderHelper {
+class TextureHelper {
 
 public:
     static void loadGameTextures();
     static SDL_Texture *getTileTexture(TileType type);
     static SDL_Texture *loadTexture(const char *fileName);
     static SDL_Texture *getBackgroundTexture();
-    static RenderComponent createPlayerRender();
-    static RenderComponent createEnemyRender();
-    static RenderComponent createWeaponRender();
     static SDL_Texture *getTexture(std::string name);
 
 private:

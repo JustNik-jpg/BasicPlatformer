@@ -4,15 +4,15 @@
 
 #include <string>
 #include <iostream>
-#include "RenderHelper.h"
+#include "TextureHelper.h"
 #include "Engine.h"
 
 extern Engine engine;
 
 //TODO: create texture atlas
-std::map<std::string, SDL_Texture *> RenderHelper::textureMap = std::map<std::string, SDL_Texture *>();
+std::map<std::string, SDL_Texture *> TextureHelper::textureMap = std::map<std::string, SDL_Texture *>();
 
-void RenderHelper::loadGameTextures() {
+void TextureHelper::loadGameTextures() {
     //Background texture
     textureMap["background"] = loadTexture("back.png");
 
@@ -24,13 +24,15 @@ void RenderHelper::loadGameTextures() {
 
     //Player texture
     textureMap["player"] = loadTexture("char.png");
+    textureMap["player_anims"] = loadTexture("player_anims.png");
     textureMap["weapon"] = loadTexture("attack.png");
 
     //Enemy texture
     textureMap["enemy"] = loadTexture("enemy.png");
+    textureMap["enemy_anims"] = loadTexture("enemy_anims.png");
 }
 
-SDL_Texture *RenderHelper::loadTexture(const char *fileName) {
+SDL_Texture *TextureHelper::loadTexture(const char *fileName) {
     std::string path = "../assets/";
     //The final texture
     SDL_Texture *newTexture = nullptr;
@@ -54,7 +56,7 @@ SDL_Texture *RenderHelper::loadTexture(const char *fileName) {
     return newTexture;
 }
 
-SDL_Texture *RenderHelper::getTexture(std::string name) {
+SDL_Texture *TextureHelper::getTexture(std::string name) {
     if (!textureMap.contains(name)) {
         std::cout << "Trying to access not registered texture! - " << name << std::endl;
         return nullptr;
@@ -62,25 +64,10 @@ SDL_Texture *RenderHelper::getTexture(std::string name) {
     return textureMap.at(name);
 }
 
-SDL_Texture *RenderHelper::getTileTexture(TileType type) {
+SDL_Texture *TextureHelper::getTileTexture(TileType type) {
     return getTexture("tile_" + std::to_string(type));
 }
 
-SDL_Texture *RenderHelper::getBackgroundTexture() {
+SDL_Texture *TextureHelper::getBackgroundTexture() {
     return getTexture("background");
-}
-
-RenderComponent RenderHelper::createPlayerRender() {
-    RenderComponent rc = RenderComponent{getTexture("player"), SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}};
-    return rc;
-}
-
-RenderComponent RenderHelper::createWeaponRender() {
-    RenderComponent rc = RenderComponent{getTexture("weapon"), SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}};
-    return rc;
-}
-
-RenderComponent RenderHelper::createEnemyRender() {
-    RenderComponent rc = RenderComponent{getTexture("enemy"), SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}};
-    return rc;
 }

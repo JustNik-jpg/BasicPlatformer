@@ -18,6 +18,7 @@
 #include "ecs/systems/CollisionSystem.h"
 #include "ecs/systems/DeathSystem.h"
 #include "ecs/systems/EnemyAISystem.h"
+#include "ecs/systems/AnimationSystem.h"
 
 Engine engine;
 
@@ -46,7 +47,7 @@ void Game::initGame() {
     if (!engine.renderer) {
         std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg << std::endl;
     }
-    RenderHelper::loadGameTextures();
+    TextureHelper::loadGameTextures();
     engine.ecs = new ECS();
     engine.eventController = new EventController();
     engine.ecs->init();
@@ -120,6 +121,7 @@ void Game::initSystems() {
     systems.emplace_back(engine.ecs->registerSystem<CollisionSystem>());
     systems.emplace_back(engine.ecs->registerSystem<FollowSystem>());
     systems.emplace_back(engine.ecs->registerSystem<DeathSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<AnimationSystem>());
     systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
 
     Archetype physicsArchetype;
@@ -169,4 +171,9 @@ void Game::initSystems() {
     enemyAIArchetype.set(engine.ecs->getComponentID<RigidBody>());
     enemyAIArchetype.set(engine.ecs->getComponentID<TransformComponent>());
     engine.ecs->setSystemArchetype<EnemyAISystem>(enemyAIArchetype);
+
+    Archetype animationArchetype;
+    animationArchetype.set(engine.ecs->getComponentID<AnimationComponent>());
+    animationArchetype.set(engine.ecs->getComponentID<RenderComponent>());
+    engine.ecs->setSystemArchetype<AnimationSystem>(animationArchetype);
 }

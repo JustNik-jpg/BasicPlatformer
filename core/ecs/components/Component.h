@@ -5,6 +5,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <map>
 #include "../../utility/Vector2D.h"
 #include "../Types.h"
 
@@ -102,6 +103,7 @@ struct AttackComponent {
     FVector2D attackDirection;
     Uint32 lastAttackedOn;
     int attackCD;
+    int attackStance;
 };
 
 enum EntityState {
@@ -116,4 +118,25 @@ struct EnemyAIComponent {
     FVector2D currentDestination;
     Uint32 startPathAfter;
     FVector2D chasePosSeen;
+};
+
+enum AnimationState {
+    Idle,
+    Attacking,
+    Running,
+    Midair
+};
+
+struct AnimationComponent {
+    AnimationState currentState;
+    std::map<AnimationState, std::pair<int, std::vector<SDL_Rect>>> animations;
+    int currentFrame;
+    SDL_Texture *textureSheet;
+
+    void changeState(AnimationState newState) {
+        if (currentState != newState) {
+            currentFrame = 0;
+        }
+        currentState = newState;
+    }
 };

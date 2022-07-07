@@ -5,8 +5,9 @@
 #include <iostream>
 #include "EntityHelper.h"
 #include "components/Component.h"
-#include "../RenderHelper.h"
+#include "../TextureHelper.h"
 #include "../Engine.h"
+#include "../visuals/AnimationHelper.h"
 
 extern Engine engine;
 
@@ -14,7 +15,8 @@ Entity EntityHelper::createPlayer() {
     Entity playa = engine.ecs->createEntity();
     std::cout << "Player ID: " << playa << std::endl;
     engine.ecs->addComponent(playa, TransformComponent{0, -16, FVector2D{1, 0}});
-    engine.ecs->addComponent(playa, RenderHelper::createPlayerRender());
+    engine.ecs->addComponent(playa, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
+    engine.ecs->addComponent(playa, AnimationHelper::getPlayerAnimations());
     engine.ecs->addComponent(playa, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
     engine.ecs->addComponent(playa, ControlComponent{FVector2D{0, 0}});
     engine.ecs->addComponent(playa, Moving());
@@ -30,7 +32,8 @@ Entity EntityHelper::createPlayer() {
 Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
     Entity attack = engine.ecs->createEntity();
     engine.ecs->addComponent(attack, TransformComponent{0, 0, FVector2D{0, 0}});
-    engine.ecs->addComponent(attack, RenderHelper::createWeaponRender());
+    engine.ecs->addComponent(attack, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
+    engine.ecs->addComponent(attack, AnimationHelper::getPlayerAttackAnimation());
     engine.ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [this](Entity const &e) {
         if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
             auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
@@ -50,7 +53,8 @@ Entity EntityHelper::createEnemy() {
     std::cout << "Created enemy with ID: " << enemy << std::endl;
 
     engine.ecs->addComponent(enemy, TransformComponent{128, -16, FVector2D{1, 0}});
-    engine.ecs->addComponent(enemy, RenderHelper::createEnemyRender());
+    engine.ecs->addComponent(enemy, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
+    engine.ecs->addComponent(enemy, AnimationHelper::getEnemyAnimations());
     engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{128, -16, 48, 80}, {0, 0}, [](Entity const &e) {
         if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
             auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
