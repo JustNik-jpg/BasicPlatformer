@@ -12,8 +12,9 @@
 extern Engine engine;
 
 void PlayerControlHandler::handleEvent(SDL_Event &event) {
+    Entity player = engine.entityHelper->getPlayer();
 
-    if (event.key.repeat == 0) {
+    if (player != NULL_ENTITY && event.key.repeat == 0) {
         auto &rigidBody = engine.ecs->getComponent<RigidBody>(player);
         auto &controlComponent = engine.ecs->getComponent<ControlComponent>(player);
         switch (event.type) {

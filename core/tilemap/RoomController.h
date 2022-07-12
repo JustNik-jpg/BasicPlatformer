@@ -16,7 +16,9 @@ public:
     void renderCurrentLevel(SDL_Renderer *renderer);
     void validatePos(RigidBody *collider);
     FVector2D getLineOfSight(const FVector2D& pos, const FVector2D& dir);
+    void processInteraction(RigidBody *collider);
 
 private:
-    std::vector<std::vector<Tile *>> tileMap;
+    Tile getTileFromType(TileType type, int x, int y);
+    std::vector<Tile> tileMap;
 };

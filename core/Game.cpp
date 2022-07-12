@@ -62,8 +62,8 @@ void Game::run() {
     initGame();
     currentState = GameState::ACTIVE;
 
-    Entity player = engine.entityHelper->createPlayer();
-    engine.eventController->addEventHandler(new PlayerControlHandler(player));
+    engine.entityHelper->createPlayer();
+    engine.eventController->addEventHandler(new PlayerControlHandler());
 
     loop();
 }

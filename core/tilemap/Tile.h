@@ -10,11 +10,12 @@ enum TileType {
     AIR,
     BRICK,
     STONE,
-    DOOR
+    EXIT
 };
 
 struct Tile {
     bool solid;
+    bool interactive;
     SDL_Texture *texture;
     SDL_FRect tile;
     SDL_FRect collisionBox;

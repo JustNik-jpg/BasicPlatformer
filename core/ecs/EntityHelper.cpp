@@ -23,6 +23,9 @@ Entity EntityHelper::createPlayer() {
     engine.ecs->addComponent(playa, AttackComponent{false, NULL_ENTITY, FVector2D{0, 0}, 0, 1000});
     engine.ecs->addComponent(playa, SideComponent{PLAYER});
     engine.ecs->addComponent(playa, HealthComponent{4, 400});
+    engine.ecs->addComponent(playa, DeathComponent{[this]() {
+        this->player = NULL_ENTITY;
+    }});
 
     player = playa;
 
@@ -34,7 +37,7 @@ Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
     engine.ecs->addComponent(attack, TransformComponent{0, 0, FVector2D{0, 0}});
     engine.ecs->addComponent(attack, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
     engine.ecs->addComponent(attack, AnimationHelper::getPlayerAttackAnimation());
-    engine.ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [this](Entity const &e) {
+    engine.ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [](Entity const &e) {
         if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
             auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
             if (sideComponent.side == Side::ENEMY) {
