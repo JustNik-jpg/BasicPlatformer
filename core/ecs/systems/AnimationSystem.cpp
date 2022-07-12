@@ -41,11 +41,6 @@ void AnimationSystem::update() {
             return;
         }
 
-        if (entity == 1) {
-            std::cout << animationComponent.currentFrame / frameDelay << " " << animationComponent.currentState
-                      << std::endl;
-        }
-
         renderComponent.src = animationFrames[animationComponent.currentFrame / frameDelay];
         ++animationComponent.currentFrame;
         if (animationComponent.currentFrame >= animationFrames.size() * frameDelay) {

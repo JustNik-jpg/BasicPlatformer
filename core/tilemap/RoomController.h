@@ -19,6 +19,5 @@ public:
     void processInteraction(RigidBody *collider);
 
 private:
-    Tile getTileFromType(TileType type, int x, int y);
     std::vector<Tile> tileMap;
 };

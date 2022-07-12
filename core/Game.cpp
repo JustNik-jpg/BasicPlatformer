@@ -48,6 +48,7 @@ void Game::initGame() {
         std::cout << "Something went wrong creating the renderer... " << "\n" << &SDL_GetErrorMsg << std::endl;
     }
     TextureHelper::loadGameTextures();
+    TileHelper::initTileTemplates();
     engine.ecs = new ECS();
     engine.eventController = new EventController();
     engine.ecs->init();

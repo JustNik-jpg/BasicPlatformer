@@ -5,12 +5,14 @@
 #pragma once
 
 #include <SDL.h>
+#include <functional>
+#include <map>
 
 enum TileType {
     AIR,
+    EXIT,
     BRICK,
-    STONE,
-    EXIT
+    STONE
 };
 
 struct Tile {
@@ -19,4 +21,12 @@ struct Tile {
     SDL_Texture *texture;
     SDL_FRect tile;
     SDL_FRect collisionBox;
+    std::function<void()> onInteract;
+};
+
+class TileHelper {
+public:
+    static Tile setupTileAtPos(TileType type, int x, int y);
+    static void initTileTemplates();
+    static std::map<TileType, Tile> tileTemplates;
 };

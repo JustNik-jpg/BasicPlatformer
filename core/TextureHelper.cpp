@@ -21,6 +21,9 @@ void TextureHelper::loadGameTextures() {
     textureMap[brick] = loadTexture((brick + ".png").data());
     std::string stone = "tile_" + std::to_string(TileType::STONE);
     textureMap[stone] = loadTexture((stone + ".png").data());
+    std::string exit = "tile_" + std::to_string(TileType::EXIT);
+    textureMap[exit] = loadTexture((exit + ".png").data());
+    textureMap["tile_" + std::to_string(TileType::AIR)] = nullptr;
 
     //Player texture
     textureMap["player"] = loadTexture("char.png");

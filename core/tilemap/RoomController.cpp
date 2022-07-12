@@ -30,8 +30,10 @@ void RoomController::renderCurrentLevel(SDL_Renderer *renderer) {
 
 void RoomController::loadRandomRoom() {
     std::random_device generator;
-    std::uniform_int_distribution<int> distribution(0, 0);
-    loadRoom(distribution(generator));
+    std::uniform_int_distribution<int> distribution(0, 1);
+    int roomNumber = distribution(generator);
+    std::cout << "Loading room " << roomNumber << ".." << std::endl;
+    loadRoom(roomNumber);
 }
 
 void RoomController::loadRoom(int levelId) {
@@ -51,17 +53,10 @@ void RoomController::loadRoom(int levelId) {
         for (int x = 0; x < 40; ++x) {
             roomFile.get(tileChar);
             auto type = TileType((int) tileChar - 48);
-
-            tileMap.emplace_back(getTileFromType(type, x, y));
+            tileMap.emplace_back(TileHelper::setupTileAtPos(type, x * 32, y * 32));
             roomFile.ignore();
         }
     }
-}
-
-Tile RoomController::getTileFromType(TileType type, int x, int y) {
-    return Tile{type > 0, type == TileType::EXIT, type > 0 ? TextureHelper::getTileTexture(type) : nullptr,
-                SDL_FRect{static_cast<float>(x * 32), static_cast<float>(y * 32), 32, 32},
-                SDL_FRect{static_cast<float>(x * 32), static_cast<float>(y * 32), 32, 32}};
 }
 
 void RoomController::validatePos(RigidBody *collider) {
@@ -116,5 +111,11 @@ FVector2D RoomController::getLineOfSight(const FVector2D &pos, const FVector2D &
 
 void RoomController::processInteraction(RigidBody *collider) {
     //TODO: handle room exit
-
+    for (auto tile: tileMap) {
+        if (SDL_HasIntersectionF(&tile.collisionBox, &collider->collisionBox) && tile.interactive) {
+            if (tile.onInteract != nullptr) {
+                tile.onInteract();
+            }
+        }
+    }
 }

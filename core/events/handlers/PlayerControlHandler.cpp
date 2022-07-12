@@ -29,6 +29,9 @@ void PlayerControlHandler::handleEvent(SDL_Event &event) {
                     case SDLK_d:
                         controlComponent.control.x++;
                         break;
+                    case SDLK_e:
+                        engine.roomController->processInteraction(&rigidBody);
+                        break;
                 }
                 break;
             case SDL_KEYUP:

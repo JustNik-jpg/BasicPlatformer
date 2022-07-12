@@ -2,15 +2,14 @@
 // Created by JustNik on 3 Apr 2022.
 //
 
+#pragma once
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <map>
-#include "tilemap/Tile.h"
 #include "ecs/components/Component.h"
 #include "ecs/Types.h"
-
-#pragma once
+#include "tilemap/Tile.h"
 
 class TextureHelper {
 
