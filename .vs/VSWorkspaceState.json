@@ -10,6 +10,6 @@
     "\\core\\tilemap",
     "\\core\\utility"
   ],
-  "SelectedNode": "\\core\\tilemap\\Tile.cpp",
+  "SelectedNode": "\\core\\tilemap\\RoomController.cpp",
   "PreviewInSolutionExplorer": false
 }

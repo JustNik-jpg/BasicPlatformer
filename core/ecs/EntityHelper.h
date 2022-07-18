@@ -12,6 +12,7 @@ public:
     Entity createPlayer();
     Entity createPlayerAttackEntity(Entity owner);
     Entity createEnemy();
+    Entity createEnemy(float x, float y);
     Entity getPlayer();
 
 private:

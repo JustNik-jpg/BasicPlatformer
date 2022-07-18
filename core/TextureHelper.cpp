@@ -26,12 +26,10 @@ void TextureHelper::loadGameTextures() {
     textureMap["tile_" + std::to_string(TileType::AIR)] = nullptr;
 
     //Player texture
-    textureMap["player"] = loadTexture("char.png");
     textureMap["player_anims"] = loadTexture("player_anims.png");
     textureMap["weapon"] = loadTexture("attack.png");
 
     //Enemy texture
-    textureMap["enemy"] = loadTexture("enemy.png");
     textureMap["enemy_anims"] = loadTexture("enemy_anims.png");
 }
 

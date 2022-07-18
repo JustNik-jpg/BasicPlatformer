@@ -55,7 +55,6 @@ void Game::initGame() {
     initSystems();
     engine.entityHelper = new EntityHelper();
     engine.roomController = new RoomController();
-    engine.roomController->loadRandomRoom();
 }
 
 
@@ -64,6 +63,7 @@ void Game::run() {
     currentState = GameState::ACTIVE;
 
     engine.entityHelper->createPlayer();
+    engine.roomController->loadRandomRoom();
     engine.eventController->addEventHandler(new PlayerControlHandler());
 
     loop();

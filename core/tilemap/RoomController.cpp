@@ -9,6 +9,7 @@
 #include "../collision/Collision.h"
 #include "../Engine.h"
 #include <fstream>
+#include <sstream>
 
 extern Engine engine;
 
@@ -38,25 +39,24 @@ void RoomController::loadRandomRoom() {
 
 void RoomController::loadRoom(int levelId) {
     tileMap.clear();
+    currentEnemyCount = 0;
 
-    engine.entityHelper->createEnemy();
-
-    char tileChar;
-    std::fstream roomFile;
+    std::ifstream roomFile;
     std::string path = "../rooms/room" + std::to_string(levelId) + ".txt";
     roomFile.open(path);
     if (roomFile.peek() == std::ifstream::traits_type::eof()) {
         std::cout << "Empty room file. Can't load current room..." << std::endl;
         return;
     }
-    for (int y = 0; y < 24; ++y) {
-        for (int x = 0; x < 40; ++x) {
-            roomFile.get(tileChar);
-            auto type = TileType((int) tileChar - 48);
-            tileMap.emplace_back(TileHelper::setupTileAtPos(type, x * 32, y * 32));
-            roomFile.ignore();
-        }
-    }
+
+    std::stringstream buffer;
+    buffer << roomFile.rdbuf();
+
+    std::istringstream fileStream(buffer.str());
+
+    parseRoom(fileStream);
+    parsePlayerStartPos(fileStream);
+    parseEnemies(fileStream);
 }
 
 void RoomController::validatePos(RigidBody *collider) {
@@ -111,11 +111,66 @@ FVector2D RoomController::getLineOfSight(const FVector2D &pos, const FVector2D &
 
 void RoomController::processInteraction(RigidBody *collider) {
     //TODO: handle room exit
-    for (auto tile: tileMap) {
+    for (const auto &tile: tileMap) {
         if (SDL_HasIntersectionF(&tile.collisionBox, &collider->collisionBox) && tile.interactive) {
             if (tile.onInteract != nullptr) {
                 tile.onInteract();
             }
+        }
+    }
+}
+
+void RoomController::enemyDied() {
+    currentEnemyCount--;
+}
+
+int RoomController::getEnemyCount() const {
+    return currentEnemyCount;
+}
+
+void RoomController::parseEnemies(std::istringstream &roomFile) {
+
+    int numberOfEnemies;
+    roomFile >> numberOfEnemies;
+
+    for (int i = 0; i < numberOfEnemies; ++i) {
+        float x, y;
+        roomFile >> x;
+        roomFile.ignore();
+        roomFile >> y;
+        roomFile.ignore();
+        engine.entityHelper->createEnemy(x, y);
+        currentEnemyCount++;
+    }
+}
+
+void RoomController::parsePlayerStartPos(std::istringstream &roomFile) {
+    float x, y;
+    roomFile >> x;
+    roomFile.ignore();
+    roomFile >> y;
+    roomFile.ignore();
+
+    Entity entity = engine.entityHelper->getPlayer();
+    if (entity != NULL_ENTITY && engine.ecs->hasArchetype<RigidBody>(entity) &&
+        engine.ecs->hasArchetype<TransformComponent>(entity)) {
+        auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
+        auto &transform = engine.ecs->getComponent<TransformComponent>(entity);
+
+        transform.x = rigidBody.collisionBox.x = x;
+        transform.y = rigidBody.collisionBox.y = y;
+    }
+}
+
+void RoomController::parseRoom(std::istringstream &roomFile) {
+    char tileType;
+
+    for (int y = 0; y < 24; ++y) {
+        for (int x = 0; x < 40; ++x) {
+            roomFile.get(tileType);
+            auto type = TileType((int) tileType - 48);
+            tileMap.emplace_back(TileHelper::setupTileAtPos(type, x * 32, y * 32));
+            roomFile.ignore();
         }
     }
 }

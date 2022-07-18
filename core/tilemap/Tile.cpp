@@ -19,8 +19,10 @@ Tile TileHelper::setupTileAtPos(TileType type, int x, int y) {
 void TileHelper::initTileTemplates() {
     TileHelper::tileTemplates = std::map<TileType, Tile>{
             {AIR,   Tile{false, false, nullptr, SDL_FRect{0, 0, 32, 32}, SDL_FRect{0, 0, 32, 32}}},
-            {EXIT,  Tile{false, true, TextureHelper::getTileTexture(EXIT), SDL_FRect{0, 0, 64, 96}, SDL_FRect{0, 0, 64, 96}, [](){
-                engine.roomController->loadRandomRoom();
+            {EXIT,  Tile{false, true, TextureHelper::getTileTexture(EXIT), SDL_FRect{0, 0, 64, 96}, SDL_FRect{0, 0, 64, 96}, []() {
+                if (engine.roomController->getEnemyCount() < 1) {
+                    engine.roomController->loadRandomRoom();
+                }
             }}},
             {BRICK, Tile{true, false, TextureHelper::getTileTexture(BRICK), SDL_FRect{0, 0, 32, 32}, SDL_FRect{0, 0, 32, 32}}},
             {STONE, Tile{true, false, TextureHelper::getTileTexture(STONE), SDL_FRect{0, 0, 32, 32}, SDL_FRect{0, 0, 32, 32}}}

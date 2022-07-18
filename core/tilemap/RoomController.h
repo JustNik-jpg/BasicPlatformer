@@ -17,7 +17,13 @@ public:
     void validatePos(RigidBody *collider);
     FVector2D getLineOfSight(const FVector2D& pos, const FVector2D& dir);
     void processInteraction(RigidBody *collider);
+    void enemyDied();
+    int getEnemyCount() const;
 
 private:
+    void parseRoom(std::istringstream &roomFile);
+    void parseEnemies(std::istringstream &roomFile);
+    void parsePlayerStartPos(std::istringstream &roomFile);
     std::vector<Tile> tileMap;
+    int currentEnemyCount;
 };

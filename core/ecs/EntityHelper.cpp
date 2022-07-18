@@ -52,19 +52,26 @@ Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
 }
 
 Entity EntityHelper::createEnemy() {
+    return createEnemy(128, -16);
+}
+
+Entity EntityHelper::createEnemy(float x, float y) {
     Entity enemy = engine.ecs->createEntity();
     std::cout << "Created enemy with ID: " << enemy << std::endl;
 
-    engine.ecs->addComponent(enemy, TransformComponent{128, -16, FVector2D{1, 0}});
+    engine.ecs->addComponent(enemy, TransformComponent{x, y, FVector2D{1, 0}});
     engine.ecs->addComponent(enemy, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
     engine.ecs->addComponent(enemy, AnimationHelper::getEnemyAnimations());
-    engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{128, -16, 48, 80}, {0, 0}, [](Entity const &e) {
+    engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{x, y, 48, 80}, {0, 0}, [](Entity const &e) {
         if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
             auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
             if (sideComponent.side != Side::ENEMY) {
                 --engine.ecs->getComponent<HealthComponent>(e);
             }
         }
+    }});
+    engine.ecs->addComponent(enemy, DeathComponent{[](){
+        engine.roomController->enemyDied();
     }});
     engine.ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
     engine.ecs->addComponent(enemy, Moving());
