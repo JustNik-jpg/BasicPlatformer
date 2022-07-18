@@ -28,6 +28,7 @@ void TextureHelper::loadGameTextures() {
     //Player texture
     textureMap["player_anims"] = loadTexture("player_anims.png");
     textureMap["weapon"] = loadTexture("attack.png");
+    textureMap["health"] = loadTexture("heart.png");
 
     //Enemy texture
     textureMap["enemy_anims"] = loadTexture("enemy_anims.png");
@@ -57,7 +58,7 @@ SDL_Texture *TextureHelper::loadTexture(const char *fileName) {
     return newTexture;
 }
 
-SDL_Texture *TextureHelper::getTexture(std::string name) {
+SDL_Texture *TextureHelper::getTexture(const std::string& name) {
     if (!textureMap.contains(name)) {
         std::cout << "Trying to access not registered texture! - " << name << std::endl;
         return nullptr;
@@ -71,4 +72,8 @@ SDL_Texture *TextureHelper::getTileTexture(TileType type) {
 
 SDL_Texture *TextureHelper::getBackgroundTexture() {
     return getTexture("background");
+}
+
+SDL_Texture *TextureHelper::getHealthTexture() {
+    return getTexture("health");
 }

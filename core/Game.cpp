@@ -19,6 +19,7 @@
 #include "ecs/systems/DeathSystem.h"
 #include "ecs/systems/EnemyAISystem.h"
 #include "ecs/systems/AnimationSystem.h"
+#include "ecs/systems/HealthDisplaySystem.h"
 
 Engine engine;
 
@@ -124,6 +125,7 @@ void Game::initSystems() {
     systems.emplace_back(engine.ecs->registerSystem<DeathSystem>());
     systems.emplace_back(engine.ecs->registerSystem<AnimationSystem>());
     systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
+    systems.emplace_back(engine.ecs->registerSystem<HealthDisplaySystem>());
 
     Archetype physicsArchetype;
     physicsArchetype.set(engine.ecs->getComponentID<RigidBody>());
