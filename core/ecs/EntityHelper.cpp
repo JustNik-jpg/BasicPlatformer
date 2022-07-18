@@ -22,7 +22,7 @@ Entity EntityHelper::createPlayer() {
     engine.ecs->addComponent(playa, Moving());
     engine.ecs->addComponent(playa, AttackComponent{false, NULL_ENTITY, FVector2D{0, 0}, 0, 1000});
     engine.ecs->addComponent(playa, SideComponent{PLAYER});
-    engine.ecs->addComponent(playa, HealthComponent{4, 400});
+    engine.ecs->addComponent(playa, HealthComponent{4, 800});
     engine.ecs->addComponent(playa, DeathComponent{[this]() {
         this->player = NULL_ENTITY;
     }});
@@ -42,6 +42,13 @@ Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
             auto &sideComponent = engine.ecs->getComponent<SideComponent>(e);
             if (sideComponent.side == Side::ENEMY) {
                 --engine.ecs->getComponent<HealthComponent>(e);
+                auto &rigidBody = engine.ecs->getComponent<RigidBody>(e);
+
+                auto &playerRigidBody = engine.ecs->getComponent<RigidBody>(engine.entityHelper->getPlayer());
+                rigidBody.velocity.x += std::copysign(15.f,
+                                                      (rigidBody.collisionBox.x + (rigidBody.collisionBox.w / 2)) -
+                                                      (playerRigidBody.collisionBox.x +
+                                                       (playerRigidBody.collisionBox.w / 2)));
             }
         }
     }});
@@ -70,7 +77,7 @@ Entity EntityHelper::createEnemy(float x, float y) {
             }
         }
     }});
-    engine.ecs->addComponent(enemy, DeathComponent{[](){
+    engine.ecs->addComponent(enemy, DeathComponent{[]() {
         engine.roomController->enemyDied();
     }});
     engine.ecs->addComponent(enemy, ControlComponent{FVector2D{0, 0}});
