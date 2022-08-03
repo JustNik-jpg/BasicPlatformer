@@ -42,7 +42,7 @@ void AnimationSystem::update() {
         }
 
         renderComponent.src = animationFrames[animationComponent.currentFrame / frameDelay];
-        ++animationComponent.currentFrame;
+        animationComponent.currentFrame+= engine.worldTimer->getDeltaTime();
         if (animationComponent.currentFrame >= animationFrames.size() * frameDelay) {
             animationComponent.currentFrame = 0;
         }

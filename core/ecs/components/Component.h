@@ -130,7 +130,7 @@ enum AnimationState {
 struct AnimationComponent {
     AnimationState currentState;
     std::map<AnimationState, std::pair<int, std::vector<SDL_Rect>>> animations;
-    int currentFrame;
+    float currentFrame;
     SDL_Texture *textureSheet;
 
     void changeState(AnimationState newState) {

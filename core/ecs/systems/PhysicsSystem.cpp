@@ -14,13 +14,13 @@ void PhysicsSystem::update() {
         auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
 
         if (rigidBody.velocity.y < constants::MAX_FALL_SPEED) {
-            rigidBody.velocity.y += constants::GRAVITY_ACCELERATION;
+            rigidBody.velocity.y += constants::GRAVITY_ACCELERATION* engine.worldTimer->getDeltaTime();
         }
 
         if (rigidBody.velocity.x > 0) {
-            rigidBody.velocity.x--;
+            rigidBody.velocity.x-= engine.worldTimer->getDeltaTime();
         } else if (rigidBody.velocity.x < 0) {
-            rigidBody.velocity.x++;
+            rigidBody.velocity.x+= engine.worldTimer->getDeltaTime();
         }
 
     }

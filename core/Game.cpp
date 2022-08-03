@@ -56,6 +56,7 @@ void Game::initGame() {
     initSystems();
     engine.entityHelper = new EntityHelper();
     engine.roomController = new RoomController();
+    engine.worldTimer = new WorldTimer();
 }
 
 
@@ -71,30 +72,14 @@ void Game::run() {
 }
 
 void Game::loop() {
-
-    //Uint32 lastUpdate = 0;
-
     while (currentState == GameState::ACTIVE) {
         processInput();
         engine.roomController->renderCurrentLevel(engine.renderer);
         for (const auto &system: systems) {
             system->update();
         }
-
-        Uint64 start = SDL_GetPerformanceCounter();
-
-        //TODO convert to normal looking phys based movement system
-        //Uint32 current = SDL_GetTicks();
-        //float dT = (current - lastUpdate) / 256.0f;
-        //lastUpdate = current;
-
-        Uint64 end = SDL_GetPerformanceCounter();
-
-        float elapsedMS = (end - start) / (float) SDL_GetPerformanceFrequency() * 1000.0f;
+        engine.worldTimer->tick();
         render();
-
-        // Cap to 60 FPS
-        SDL_Delay(std::floor(16.666f - elapsedMS));
     }
 }
 

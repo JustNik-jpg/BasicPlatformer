@@ -7,6 +7,7 @@
 #include "ecs/EntityHelper.h"
 #include "events/EventController.h"
 #include "tilemap/RoomController.h"
+#include "world/WorldTimer.h"
 
 struct Engine {
     RoomController *roomController;
@@ -15,4 +16,5 @@ struct Engine {
     SDL_Window *window;
     ECS* ecs;
     EventController* eventController;
+    WorldTimer* worldTimer;
 };
