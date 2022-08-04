@@ -7,7 +7,6 @@
 #include "ecs/systems/MovementSystem.h"
 #include "ecs/systems/RenderSystem.h"
 #include "ecs/components/Component.h"
-#include "events/handlers/PlayerControlHandler.h"
 #include "Engine.h"
 #include "ecs/systems/PhysicsSystem.h"
 #include "ecs/systems/ControlSystem.h"
@@ -74,7 +73,64 @@ void Game::run() {
 
     engine.entityHelper->createPlayer();
     engine.roomController->loadRandomRoom();
-    engine.eventController->addEventHandler(new PlayerControlHandler());
+    engine.eventController->addEventHandler([](SDL_Event &evnt){
+        Entity player = engine.entityHelper->getPlayer();
+
+        if (player != NULL_ENTITY && evnt.key.repeat == 0) {
+            auto &rigidBody = engine.ecs->getComponent<RigidBody>(player);
+            auto &controlComponent = engine.ecs->getComponent<ControlComponent>(player);
+            switch (evnt.type) {
+                case SDL_KEYDOWN:
+                    switch (evnt.key.keysym.sym) {
+                        case SDLK_SPACE:
+                            controlComponent.control.y--;
+                            break;
+                        case SDLK_a:
+                            controlComponent.control.x--;
+                            break;
+                        case SDLK_d:
+                            controlComponent.control.x++;
+                            break;
+                        case SDLK_e:
+                            engine.roomController->processInteraction(&rigidBody);
+                            break;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    switch (evnt.key.keysym.sym) {
+                        case SDLK_SPACE:
+                            controlComponent.control.y++;
+                            break;
+                        case SDLK_a:
+                            controlComponent.control.x++;
+                            break;
+                        case SDLK_d:
+                            controlComponent.control.x--;
+                            break;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN :
+                    auto &attackComponent = engine.ecs->getComponent<AttackComponent>(player);
+                    switch (evnt.button.button) {
+                        case SDL_BUTTON_LEFT:
+                            attackComponent.attacking = true;
+                            attackComponent.attackDirection.x = -1;
+                            break;
+                        case SDL_BUTTON_RIGHT:
+                            attackComponent.attacking = true;
+                            attackComponent.attackDirection.x = 1;
+
+                            break;
+                    }
+                    break;
+            }
+        }
+    });
+    engine.eventController->addEventHandler([this](SDL_Event &evnt){
+        if (evnt.type == SDL_QUIT) {
+            this->currentState = GameState::EXIT;
+        }
+    });
 
     loop();
 }

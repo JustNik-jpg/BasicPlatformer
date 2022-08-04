@@ -5,17 +5,12 @@
 #include "EventController.h"
 
 void EventController::processEvents(SDL_Event &event) {
-    for (auto handler: this->handlers) {
-        handler->handleEvent(event);
+    for (const auto& handler: this->handlers) {
+        handler(event);
     }
 }
 
-void EventController::addEventHandler(IEventHandler *handler) {
+void EventController::addEventHandler(const handler& handler) {
     this->handlers.push_back(handler);
 }
 
-EventController::~EventController() {
-    for (auto handler: this->handlers) {
-        delete handler;
-    }
-}

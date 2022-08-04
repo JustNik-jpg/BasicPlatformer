@@ -5,14 +5,17 @@
 #pragma once
 
 #include <vector>
-#include "handlers/IEventHandler.h"
+#include <functional>
+#include <functional>
+#include "SDL_events.h"
+
+typedef std::function<void(SDL_Event & )> handler;
 
 class EventController {
 public:
     void processEvents(SDL_Event &event);
-    void addEventHandler(IEventHandler *handler);
-    ~EventController();
+    void addEventHandler(const handler& handler);
 
 private:
-    std::vector<IEventHandler *> handlers;
+    std::vector<handler> handlers;
 };
