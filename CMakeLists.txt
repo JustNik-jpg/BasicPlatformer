@@ -3,11 +3,11 @@ project(BasicPlatformer)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(SDL2_INCLUDE_DIR E:/Files/Prog/cpp/libs/SDL2-2.0.22/include)
-set(SDL2_LIB_DIR E:/Files/Prog/cpp/libs/SDL2-2.0.22/lib/x64)
+set(SDL2_INCLUDE_DIR includes/SDL2/include)
+set(SDL2_LIB_DIR includes/SDL2/lib/x64)
 
-set(SDL2_IMAGE_INCLUDE_DIR E:/Files/Prog/cpp/libs/SDL2_image-2.0.5/include)
-set(SDL2_IMAGE_LIB_DIR E:/Files/Prog/cpp/libs/SDL2_image-2.0.5/lib/x64)
+set(SDL2_IMAGE_INCLUDE_DIR includes/SDL_Image/include)
+set(SDL2_IMAGE_LIB_DIR includes/SDL_Image/lib/x64)
 
 include_directories(${SDL2_INCLUDE_DIR})
 link_directories(${SDL2_LIB_DIR})

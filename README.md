@@ -1,6 +1,12 @@
 # BasicPlatformer
-Just a basic platformer to test my skills   
-Not much to see
+Just a basic platformer to test my skills.   
+Not much to see?
+
+### Dependencies
+In order to build this project you need SDL2 and SDL Image libraries,   
+you can put them in respective folders in /include directory    
+used versions are SDL2 - 2.0.22, SDL Image - 2.6.1, 
+but newer must work just fine.
 
 ### Controls
 A, D - move right, left  
