@@ -11,6 +11,7 @@
 #include "ecs/EntityHelper.h"
 
 enum class GameState {
+    INITIALIZED,
     ACTIVE,
     EXIT
 };

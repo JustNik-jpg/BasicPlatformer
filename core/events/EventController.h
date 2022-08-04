@@ -11,6 +11,7 @@ class EventController {
 public:
     void processEvents(SDL_Event &event);
     void addEventHandler(IEventHandler *handler);
+    ~EventController();
 
 private:
     std::vector<IEventHandler *> handlers;

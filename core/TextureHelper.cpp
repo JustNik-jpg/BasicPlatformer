@@ -77,3 +77,9 @@ SDL_Texture *TextureHelper::getBackgroundTexture() {
 SDL_Texture *TextureHelper::getHealthTexture() {
     return getTexture("health");
 }
+
+void TextureHelper::unloadTextures() {
+    for (auto item : textureMap) {
+        SDL_DestroyTexture(item.second);
+    }
+}

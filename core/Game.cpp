@@ -7,7 +7,6 @@
 #include "ecs/systems/MovementSystem.h"
 #include "ecs/systems/RenderSystem.h"
 #include "ecs/components/Component.h"
-#include <cmath>
 #include "events/handlers/PlayerControlHandler.h"
 #include "Engine.h"
 #include "ecs/systems/PhysicsSystem.h"
@@ -24,10 +23,20 @@
 Engine engine;
 
 Game::Game() {
+    initGame();
+    currentState = GameState::INITIALIZED;
 }
 
 Game::~Game() {
+    delete engine.ecs;
+    delete engine.eventController;
+    delete engine.entityHelper;
+    delete engine.roomController;
+    delete engine.worldTimer;
 
+    SDL_DestroyRenderer(engine.renderer);
+    SDL_DestroyWindow(engine.window);
+    TextureHelper::unloadTextures();
 }
 
 
@@ -61,7 +70,6 @@ void Game::initGame() {
 
 
 void Game::run() {
-    initGame();
     currentState = GameState::ACTIVE;
 
     engine.entityHelper->createPlayer();

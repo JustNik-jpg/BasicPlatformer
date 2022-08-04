@@ -17,6 +17,7 @@ public:
     static void loadGameTextures();
     static SDL_Texture *getTileTexture(TileType type);
     static SDL_Texture *loadTexture(const char *fileName);
+    static void unloadTextures();
     static SDL_Texture *getBackgroundTexture();
     static SDL_Texture *getTexture(const std::string &name);
     static SDL_Texture *getHealthTexture();

@@ -13,3 +13,9 @@ void EventController::processEvents(SDL_Event &event) {
 void EventController::addEventHandler(IEventHandler *handler) {
     this->handlers.push_back(handler);
 }
+
+EventController::~EventController() {
+    for (auto handler: this->handlers) {
+        delete handler;
+    }
+}
