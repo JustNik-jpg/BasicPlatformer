@@ -14,7 +14,7 @@ extern Engine engine;
 Entity EntityHelper::createPlayer() {
     Entity playa = engine.ecs->createEntity();
     std::cout << "Player ID: " << playa << std::endl;
-    engine.ecs->addComponent(playa, TransformComponent{0, -16, FVector2D{1, 0}});
+    engine.ecs->addComponent(playa, TransformComponent{0, -16, FVector2D{0, 0}});
     engine.ecs->addComponent(playa, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
     engine.ecs->addComponent(playa, AnimationHelper::getPlayerAnimations());
     engine.ecs->addComponent(playa, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});

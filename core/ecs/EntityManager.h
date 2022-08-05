@@ -14,9 +14,11 @@ public:
     void deleteEntity(Entity entity);
     void setArchetype(Entity entity, Archetype archetype);
     Archetype getArchetype(Entity entity);
+    std::vector<Entity> const &getAliveEntities();
 
 private:
     std::uint32_t livingEntityCount;
     std::queue<Entity> availableEntities;
-    std::array<Archetype , MAX_ENTITIES> archetypes;
+    std::vector<Entity> aliveEntities;
+    std::array<Archetype, MAX_ENTITIES> archetypes;
 };

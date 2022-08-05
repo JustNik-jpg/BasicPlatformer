@@ -25,6 +25,7 @@ Entity EntityManager::createEntity() {
     Entity id = availableEntities.front();
     availableEntities.pop();
     ++livingEntityCount;
+    aliveEntities.push_back(id);
 
     return id;
 }
@@ -41,6 +42,7 @@ void EntityManager::deleteEntity(Entity entity) {
     // Put the destroyed ID at the back of the queue
     availableEntities.push(entity);
     --livingEntityCount;
+    aliveEntities.erase(std::remove(aliveEntities.begin(), aliveEntities.end(), entity), aliveEntities.end());
 }
 
 void EntityManager::setArchetype(Entity entity, Archetype archetype) {
@@ -58,4 +60,8 @@ Archetype EntityManager::getArchetype(Entity entity) {
         return archetypes[NULL_ENTITY];
     }
     return archetypes[entity];
+}
+
+std::vector<Entity> const &EntityManager::getAliveEntities() {
+    return aliveEntities;
 }

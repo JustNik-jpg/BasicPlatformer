@@ -39,3 +39,7 @@ void ECS::destroyEntity(Entity entity) {
     componentManager->entityDestroyed(entity);
     systemManager->entityDestroyed(entity);
 }
+
+std::vector<Entity> const &ECS::getAliveEntities() {
+    return entityManager->getAliveEntities();
+}

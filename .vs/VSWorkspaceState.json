@@ -6,10 +6,9 @@
     "\\core\\ecs\\components",
     "\\core\\ecs\\systems",
     "\\core\\events",
-    "\\core\\events\\handlers",
     "\\core\\tilemap",
     "\\core\\utility"
   ],
-  "SelectedNode": "\\core\\tilemap\\RoomController.cpp",
+  "SelectedNode": "\\core\\events\\EventController.cpp",
   "PreviewInSolutionExplorer": false
 }

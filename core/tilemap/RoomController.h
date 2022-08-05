@@ -11,6 +11,8 @@
 
 class RoomController {
 public:
+    void start();
+    void restart();
     void loadRandomRoom();
     void loadRoom(int levelId);
     void renderCurrentLevel(SDL_Renderer *renderer);

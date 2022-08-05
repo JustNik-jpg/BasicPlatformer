@@ -11,7 +11,8 @@ but newer must work just fine.
 ### Controls
 A, D - move right, left  
 Space - jump    
-LMB, RMB - attack left, right
+LMB, RMB - attack left, right   
+R - restart(if died, or just want to start anew)
 
 ### Gameplay
 Kill all enemies to open the door to the next room (only 2 different rooms for now?)

@@ -11,6 +11,7 @@ public:
     Entity createEntity();
 
     void destroyEntity(Entity entity);
+    std::vector<Entity> const &getAliveEntities();
 
 
     // Component methods

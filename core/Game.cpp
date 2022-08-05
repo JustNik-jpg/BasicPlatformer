@@ -71,10 +71,12 @@ void Game::initGame() {
 void Game::run() {
     currentState = GameState::ACTIVE;
 
-    engine.entityHelper->createPlayer();
-    engine.roomController->loadRandomRoom();
-    engine.eventController->addEventHandler([](SDL_Event &evnt){
+    engine.roomController->start();
+    engine.eventController->addEventHandler([](SDL_Event &evnt) {
         Entity player = engine.entityHelper->getPlayer();
+        if (evnt.key.keysym.sym == SDLK_r && evnt.key.repeat == 0 && evnt.type == SDL_KEYDOWN) {
+            engine.roomController->restart();
+        }
 
         if (player != NULL_ENTITY && evnt.key.repeat == 0) {
             auto &rigidBody = engine.ecs->getComponent<RigidBody>(player);
@@ -126,7 +128,7 @@ void Game::run() {
             }
         }
     });
-    engine.eventController->addEventHandler([this](SDL_Event &evnt){
+    engine.eventController->addEventHandler([this](SDL_Event &evnt) {
         if (evnt.type == SDL_QUIT) {
             this->currentState = GameState::EXIT;
         }

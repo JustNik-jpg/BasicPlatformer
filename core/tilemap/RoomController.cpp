@@ -110,7 +110,6 @@ FVector2D RoomController::getLineOfSight(const FVector2D &pos, const FVector2D &
 }
 
 void RoomController::processInteraction(RigidBody *collider) {
-    //TODO: handle room exit
     for (const auto &tile: tileMap) {
         if (SDL_HasIntersectionF(&tile.collisionBox, &collider->collisionBox) && tile.interactive) {
             if (tile.onInteract != nullptr) {
@@ -173,4 +172,20 @@ void RoomController::parseRoom(std::istringstream &roomFile) {
             roomFile.ignore();
         }
     }
+}
+
+void RoomController::start() {
+    engine.entityHelper->createPlayer();
+    loadRandomRoom();
+}
+
+void RoomController::restart() {
+    std::vector<Entity> aliveEntities;
+    aliveEntities = engine.ecs->getAliveEntities();
+
+    for (auto entity: aliveEntities) {
+        engine.ecs->destroyEntity(entity);
+    }
+
+    start();
 }
