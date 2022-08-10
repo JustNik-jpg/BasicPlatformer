@@ -18,6 +18,7 @@
 #include "ecs/systems/EnemyAISystem.h"
 #include "ecs/systems/AnimationSystem.h"
 #include "ecs/systems/HealthDisplaySystem.h"
+#include "ecs/systems/PlayerMovementControlSystem.h"
 
 Engine engine;
 
@@ -84,33 +85,33 @@ void Game::run() {
             switch (evnt.type) {
                 case SDL_KEYDOWN:
                     switch (evnt.key.keysym.sym) {
-                        case SDLK_SPACE:
-                            controlComponent.control.y--;
-                            break;
-                        case SDLK_a:
-                            controlComponent.control.x--;
-                            break;
-                        case SDLK_d:
-                            controlComponent.control.x++;
-                            break;
+                        //case SDLK_SPACE:
+                        //    controlComponent.control.y--;
+                        //    break;
+                        //case SDLK_a:
+                        //    controlComponent.control.x--;
+                        //    break;
+                        //case SDLK_d:
+                        //    controlComponent.control.x++;
+                        //    break;
                         case SDLK_e:
                             engine.roomController->processInteraction(&rigidBody);
                             break;
                     }
                     break;
-                case SDL_KEYUP:
-                    switch (evnt.key.keysym.sym) {
-                        case SDLK_SPACE:
-                            controlComponent.control.y++;
-                            break;
-                        case SDLK_a:
-                            controlComponent.control.x++;
-                            break;
-                        case SDLK_d:
-                            controlComponent.control.x--;
-                            break;
-                    }
-                    break;
+                //case SDL_KEYUP:
+                //    switch (evnt.key.keysym.sym) {
+                //        case SDLK_SPACE:
+                //            controlComponent.control.y++;
+                //            break;
+                //        case SDLK_a:
+                //            controlComponent.control.x++;
+                //            break;
+                //        case SDLK_d:
+                //            controlComponent.control.x--;
+                //            break;
+                //    }
+                //    break;
                 case SDL_MOUSEBUTTONDOWN :
                     auto &attackComponent = engine.ecs->getComponent<AttackComponent>(player);
                     switch (evnt.button.button) {
@@ -177,6 +178,8 @@ void Game::initSystems() {
     systems.emplace_back(engine.ecs->registerSystem<AnimationSystem>());
     systems.emplace_back(engine.ecs->registerSystem<RenderSystem>());
     systems.emplace_back(engine.ecs->registerSystem<HealthDisplaySystem>());
+    systems.emplace_back(engine.ecs->registerSystem<PlayerMovementControlSystem>());
+
 
     Archetype physicsArchetype;
     physicsArchetype.set(engine.ecs->getComponentID<RigidBody>());

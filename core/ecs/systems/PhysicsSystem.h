@@ -6,7 +6,7 @@
 
 #include "System.h"
 
-class PhysicsSystem : public System{
+class PhysicsSystem : public System {
 public :
     void update() override;
 };
