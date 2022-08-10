@@ -18,5 +18,5 @@ namespace collision {
                                    FVector2D &contactPoint, FVector2D &contactNormal, float &contactTime);
 
 
-    bool resolveCollisionMovingRectWithRect(RigidBody *movingRect, SDL_FRect *staticRect);
+    bool resolveCollisionMovingRectWithRect(RigidBody *movingRect, float dT, SDL_FRect *staticRect);
 }

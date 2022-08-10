@@ -64,9 +64,10 @@ void RoomController::validatePos(RigidBody *collider) {
     float t = 0, min_t = INFINITY;
     std::vector<std::pair<int, float>> z;
 
+
     for (int i = 0; i < tileMap.size(); ++i) {
         if (collision::collideMovingRectWithRect(&collider->collisionBox, tileMap[i].collisionBox,
-                                                 collider->velocity, cp, cn, t) &&
+                                                 collider->velocity * engine.worldTimer->getDeltaTime(), cp, cn, t) &&
             tileMap[i].solid) {
             z.emplace_back(i, t);
         }
@@ -87,7 +88,7 @@ void RoomController::validatePos(RigidBody *collider) {
               });
 
     for (auto j: z) {
-        collision::resolveCollisionMovingRectWithRect(collider, &tileMap[j.first].collisionBox);
+        collision::resolveCollisionMovingRectWithRect(collider, engine.worldTimer->getDeltaTime(), &tileMap[j.first].collisionBox);
     }
 }
 

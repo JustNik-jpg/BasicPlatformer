@@ -55,7 +55,7 @@ bool collision::collideRayWithRect(const FVector2D &rayOrigin, const FVector2D &
 
     // Note if t_near == t_far, collision is principly in a diagonal
     // so pointless to resolve. By returning a CN={0,0} even though its
-    // considered a hit, the resolver wont change anything.
+    // considered a hit, the resolver won't change anything.
     return true;
 }
 
@@ -84,10 +84,10 @@ bool collision::collideMovingRectWithRect(const SDL_FRect *movingRectangle, cons
         return false;
 }
 
-bool collision::resolveCollisionMovingRectWithRect(RigidBody *movingRect, SDL_FRect *staticRect) {
+bool collision::resolveCollisionMovingRectWithRect(RigidBody *movingRect, float dT, SDL_FRect *staticRect) {
     FVector2D contactPoint, contactNormal;
     float contactTime = 0.0f;
-    if (collideMovingRectWithRect(&movingRect->collisionBox, *staticRect, movingRect->velocity, contactPoint,
+    if (collideMovingRectWithRect(&movingRect->collisionBox, *staticRect, movingRect->velocity*dT, contactPoint,
                                   contactNormal,
                                   contactTime)) {
         if (contactNormal.y > 0) {

@@ -20,10 +20,10 @@ void MovementSystem::update() {
         }
 
         engine.roomController->validatePos(&rigidBody);
-        transformComponent.x = rigidBody.collisionBox.x = std::clamp(rigidBody.velocity.x * engine.worldTimer->getDeltaTime() + rigidBody.collisionBox.x,
+        transformComponent.x = rigidBody.collisionBox.x = std::clamp((rigidBody.velocity.x * engine.worldTimer->getDeltaTime()) + rigidBody.collisionBox.x,
                                                                      0.f,
                                                                      1280.f - rigidBody.collisionBox.w);
-        transformComponent.y = rigidBody.collisionBox.y = std::clamp(rigidBody.velocity.y * engine.worldTimer->getDeltaTime() + rigidBody.collisionBox.y,
+        transformComponent.y = rigidBody.collisionBox.y = std::clamp((rigidBody.velocity.y * engine.worldTimer->getDeltaTime()) + rigidBody.collisionBox.y,
                                                                      -100.f,
                                                                      768.f - rigidBody.collisionBox.h);
     }
