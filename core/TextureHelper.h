@@ -25,5 +25,4 @@ public:
 private:
 
     static std::map<std::string, SDL_Texture *> textureMap;
-
 };

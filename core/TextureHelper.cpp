@@ -79,7 +79,7 @@ SDL_Texture *TextureHelper::getHealthTexture() {
 }
 
 void TextureHelper::unloadTextures() {
-    for (auto item : textureMap) {
+    for (const auto& item : textureMap) {
         SDL_DestroyTexture(item.second);
     }
 }
