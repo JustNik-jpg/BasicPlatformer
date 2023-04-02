@@ -33,6 +33,7 @@ Game::~Game() {
     delete engine.entityHelper;
     delete engine.roomController;
     delete engine.worldTimer;
+    delete engine.renderController;
 
     SDL_DestroyRenderer(engine.renderer);
     SDL_DestroyWindow(engine.window);
@@ -66,6 +67,10 @@ void Game::initGame() {
     engine.entityHelper = new EntityHelper();
     engine.roomController = new RoomController();
     engine.worldTimer = new WorldTimer();
+    engine.renderController = new RenderController();
+    //TODO: this needs to be thought out
+    engine.renderController->windowW = 1280;
+    engine.renderController->windowH = 768;
 }
 
 
@@ -162,7 +167,7 @@ void Game::processInput() {
 }
 
 void Game::render() {
-    SDL_RenderPresent(engine.renderer);
+    engine.renderController->Render();
 }
 
 void Game::initSystems() {

@@ -15,14 +15,14 @@ class TextureHelper {
 
 public:
     static void loadGameTextures();
-    static SDL_Texture *getTileTexture(TileType type);
+    static Sprite *getTileTexture(TileType type);
     static SDL_Texture *loadTexture(const char *fileName);
     static void unloadTextures();
-    static SDL_Texture *getBackgroundTexture();
-    static SDL_Texture *getTexture(const std::string &name);
-    static SDL_Texture *getHealthTexture();
+    static Sprite *getBackgroundTexture();
+    static Sprite *getTexture(const std::string &name);
+    static Sprite *getHealthTexture();
 
 private:
 
-    static std::map<std::string, SDL_Texture *> textureMap;
+    static std::map<std::string, Sprite *> textureMap;
 };

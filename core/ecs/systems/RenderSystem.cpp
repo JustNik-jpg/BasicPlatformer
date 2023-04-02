@@ -20,9 +20,9 @@ void RenderSystem::update() {
         //auto &rigidBody = engine.ecs->getComponent<RigidBody>(entity);
         //SDL_SetRenderDrawColor(engine.renderer, 255,0,0, 255);
         //SDL_RenderFillRectF(engine.renderer, &rigidBody.collisionBox);
-
-        SDL_RenderCopyExF(engine.renderer, renderComponent.texture, &renderComponent.src, &renderComponent.dest, 0,
-                          nullptr, transformComponent.directions.x < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+        engine.renderController->AddToRenderQueue(renderComponent.sprite, &renderComponent.dest,
+                                                  1, transformComponent.directions.x < 0 ? SDL_FLIP_HORIZONTAL
+                                                                                         : SDL_FLIP_NONE);
     }
 }
 

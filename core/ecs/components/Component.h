@@ -8,6 +8,7 @@
 #include <map>
 #include "../../utility/Vector2D.h"
 #include "../Types.h"
+#include "../../render/Sprite.h"
 
 struct TransformComponent {
     float x;
@@ -23,8 +24,7 @@ struct Following {
 };
 
 struct RenderComponent {
-    SDL_Texture *texture;
-    SDL_Rect src;  //Texture size
+    Sprite* sprite;
     SDL_FRect dest; //On screen size
 };
 
@@ -131,7 +131,7 @@ struct AnimationComponent {
     AnimationState currentState;
     std::map<AnimationState, std::pair<int, std::vector<SDL_Rect>>> animations;
     float currentFrame;
-    SDL_Texture *textureSheet;
+    Sprite *textureSheet;
 
     void changeState(AnimationState newState) {
         if (currentState != newState) {

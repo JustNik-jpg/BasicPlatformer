@@ -14,17 +14,17 @@
 extern Engine engine;
 
 void RoomController::renderCurrentLevel(SDL_Renderer *renderer) {
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, TextureHelper::getBackgroundTexture(), nullptr, nullptr);
-
+    engine.renderController->AddToRenderQueue(TextureHelper::getBackgroundTexture(), nullptr, -100);
     //SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
-    for (const auto &tile: this->tileMap) {
-        SDL_RenderCopyF(renderer, tile.texture, nullptr, &tile.tile);
+    for (auto &tile: this->tileMap) {
         //Debug stuff
         //if (tile->texture != nullptr) {
         //    SDL_RenderFillRectF(renderer, &tile->collisionBox);
         //}
+        if (tile.sprite){
+            engine.renderController->AddToRenderQueue(tile.sprite, &tile.tile, -1);
+        }
     }
 
 }

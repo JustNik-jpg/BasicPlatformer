@@ -10,28 +10,28 @@
 extern Engine engine;
 
 //TODO: create texture atlas
-std::map<std::string, SDL_Texture *> TextureHelper::textureMap = std::map<std::string, SDL_Texture *>();
+std::map<std::string, Sprite *> TextureHelper::textureMap = std::map<std::string, Sprite *>();
 
 void TextureHelper::loadGameTextures() {
     //Background texture
-    textureMap["background"] = loadTexture("back.png");
+    textureMap["background"] = new Sprite{loadTexture("back.png"), nullptr};
 
     //Tile textures
     std::string brick = "tile_" + std::to_string(TileType::BRICK);
-    textureMap[brick] = loadTexture((brick + ".png").data());
+    textureMap[brick] = new Sprite{loadTexture((brick + ".png").data()), nullptr};
     std::string stone = "tile_" + std::to_string(TileType::STONE);
-    textureMap[stone] = loadTexture((stone + ".png").data());
+    textureMap[stone] = new Sprite{loadTexture((stone + ".png").data()), nullptr};
     std::string exit = "tile_" + std::to_string(TileType::EXIT);
-    textureMap[exit] = loadTexture((exit + ".png").data());
+    textureMap[exit] = new Sprite{loadTexture((exit + ".png").data()), nullptr};
     textureMap["tile_" + std::to_string(TileType::AIR)] = nullptr;
 
     //Player texture
-    textureMap["player_anims"] = loadTexture("player_anims.png");
-    textureMap["weapon"] = loadTexture("attack.png");
-    textureMap["health"] = loadTexture("heart.png");
+    textureMap["player_anims"] = new Sprite{loadTexture("player_anims.png"), nullptr};
+    textureMap["weapon"] = new Sprite{loadTexture("attack.png"), nullptr};
+    textureMap["health"] = new Sprite{loadTexture("heart.png"), nullptr};
 
     //Enemy texture
-    textureMap["enemy_anims"] = loadTexture("enemy_anims.png");
+    textureMap["enemy_anims"] = new Sprite{loadTexture("enemy_anims.png"), nullptr};
 }
 
 SDL_Texture *TextureHelper::loadTexture(const char *fileName) {
@@ -58,7 +58,7 @@ SDL_Texture *TextureHelper::loadTexture(const char *fileName) {
     return newTexture;
 }
 
-SDL_Texture *TextureHelper::getTexture(const std::string& name) {
+Sprite *TextureHelper::getTexture(const std::string& name) {
     if (!textureMap.contains(name)) {
         std::cout << "Trying to access not registered texture! - " << name << std::endl;
         return nullptr;
@@ -66,20 +66,22 @@ SDL_Texture *TextureHelper::getTexture(const std::string& name) {
     return textureMap.at(name);
 }
 
-SDL_Texture *TextureHelper::getTileTexture(TileType type) {
+Sprite *TextureHelper::getTileTexture(TileType type) {
     return getTexture("tile_" + std::to_string(type));
 }
 
-SDL_Texture *TextureHelper::getBackgroundTexture() {
+Sprite *TextureHelper::getBackgroundTexture() {
     return getTexture("background");
 }
 
-SDL_Texture *TextureHelper::getHealthTexture() {
+Sprite *TextureHelper::getHealthTexture() {
     return getTexture("health");
 }
 
 void TextureHelper::unloadTextures() {
     for (const auto& item : textureMap) {
-        SDL_DestroyTexture(item.second);
+        SDL_DestroyTexture(item.second->texture);
+        delete item.second;
     }
+    textureMap.clear();
 }

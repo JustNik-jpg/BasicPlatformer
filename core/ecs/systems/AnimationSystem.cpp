@@ -31,7 +31,7 @@ void AnimationSystem::update() {
         }
 
         //Setting up rendering animation
-        renderComponent.texture = animationComponent.textureSheet;
+        renderComponent.sprite = animationComponent.textureSheet;
         auto &animationData = animationComponent.animations[animationComponent.currentState];
 
         int frameDelay = animationData.first;
@@ -41,7 +41,7 @@ void AnimationSystem::update() {
             return;
         }
 
-        renderComponent.src = animationFrames[animationComponent.currentFrame / frameDelay];
+        animationComponent.textureSheet->src = &animationFrames[animationComponent.currentFrame / frameDelay];
         animationComponent.currentFrame+= engine.worldTimer->getDeltaTime();
         if (animationComponent.currentFrame >= animationFrames.size() * frameDelay) {
             animationComponent.currentFrame = 0;

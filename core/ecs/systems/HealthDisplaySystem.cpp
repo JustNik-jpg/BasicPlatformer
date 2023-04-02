@@ -12,14 +12,15 @@ void HealthDisplaySystem::update() {
     Entity player = engine.entityHelper->getPlayer();
     if (player != NULL_ENTITY) {
         auto &healthComponent = engine.ecs->getComponent<HealthComponent>(player);
-
+        //for (const auto &item: UICache) {
+        //    delete item;
+        //}
+        UICache.clear();
         for (int i = 0; i < healthComponent.health; ++i) {
 
-            SDL_Rect src = {0, 0, 32, 32};
+            SDL_FRect& dest = UICache.emplace_back( SDL_FRect{i * 32.f, 0.f, 32.f, 32.f});
 
-            SDL_Rect dest = {i * 32, 0, 32, 32};
-
-            SDL_RenderCopy(engine.renderer, TextureHelper::getHealthTexture(), &src, &dest);
+            engine.renderController->AddToRenderQueue(TextureHelper::getHealthTexture(), &dest, 10);
         }
     }
 }

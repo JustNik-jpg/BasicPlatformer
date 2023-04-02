@@ -15,7 +15,7 @@ Entity EntityHelper::createPlayer() {
     Entity playa = engine.ecs->createEntity();
     std::cout << "Player ID: " << playa << std::endl;
     engine.ecs->addComponent(playa, TransformComponent{0, -16, FVector2D{0, 0}});
-    engine.ecs->addComponent(playa, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
+    engine.ecs->addComponent(playa, RenderComponent{nullptr, SDL_FRect{0, 0, 48, 80}});
     engine.ecs->addComponent(playa, AnimationHelper::getPlayerAnimations());
     engine.ecs->addComponent(playa, RigidBody{SDL_FRect{0, -16, 48, 80}, {0, 0}, nullptr});
     engine.ecs->addComponent(playa, ControlComponent{FVector2D{0, 0}});
@@ -35,7 +35,7 @@ Entity EntityHelper::createPlayer() {
 Entity EntityHelper::createPlayerAttackEntity(Entity owner) {
     Entity attack = engine.ecs->createEntity();
     engine.ecs->addComponent(attack, TransformComponent{0, 0, FVector2D{0, 0}});
-    engine.ecs->addComponent(attack, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
+    engine.ecs->addComponent(attack, RenderComponent{nullptr, SDL_FRect{0, 0, 48, 80}});
     engine.ecs->addComponent(attack, AnimationHelper::getPlayerAttackAnimation());
     engine.ecs->addComponent(attack, RigidBody{SDL_FRect{0, 0, 48, 80}, {0, 0}, [](Entity const &e) {
         if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {
@@ -67,7 +67,7 @@ Entity EntityHelper::createEnemy(float x, float y) {
     std::cout << "Created enemy with ID: " << enemy << std::endl;
 
     engine.ecs->addComponent(enemy, TransformComponent{x, y, FVector2D{1, 0}});
-    engine.ecs->addComponent(enemy, RenderComponent{nullptr, SDL_Rect{0, 0, 48, 80}, SDL_FRect{0, 0, 48, 80}});
+    engine.ecs->addComponent(enemy, RenderComponent{nullptr, SDL_FRect{0, 0, 48, 80}});
     engine.ecs->addComponent(enemy, AnimationHelper::getEnemyAnimations());
     engine.ecs->addComponent(enemy, RigidBody{SDL_FRect{x, y, 48, 80}, {0, 0}, [](Entity const &e) {
         if (engine.ecs->hasArchetype<HealthComponent>(e) && engine.ecs->hasArchetype<SideComponent>(e)) {

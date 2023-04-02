@@ -8,6 +8,7 @@
 #include "events/EventController.h"
 #include "tilemap/RoomController.h"
 #include "world/WorldTimer.h"
+#include "render/RenderController.h"
 
 struct Engine {
     RoomController *roomController;
@@ -17,4 +18,5 @@ struct Engine {
     ECS* ecs;
     EventController* eventController;
     WorldTimer* worldTimer;
+    RenderController* renderController;
 };

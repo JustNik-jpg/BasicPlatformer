@@ -4,7 +4,6 @@
 
 #include "DeathSystem.h"
 #include "../../Engine.h"
-#include "../components/Component.h"
 
 extern Engine engine;
 

@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include <functional>
 #include <map>
+#include "../render/Sprite.h"
 
 enum TileType {
     AIR,
@@ -18,7 +19,7 @@ enum TileType {
 struct Tile {
     bool solid;
     bool interactive;
-    SDL_Texture *texture;
+    Sprite *sprite;
     SDL_FRect tile;
     SDL_FRect collisionBox;
     std::function<void()> onInteract;
